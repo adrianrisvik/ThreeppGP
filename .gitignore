@@ -1,0 +1,17 @@
+cmake-build-*/
+build/
+out/
+_deps/
+*.exe
+*.dll
+*.so
+*.a
+*.lib
+*.o
+*.obj
+CMakeCache.txt
+CMakeFiles/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
