@@ -5,6 +5,7 @@
 
 
 #include "CameraController.hpp"
+#include "VehicleManager.hpp"
 #include "include/MC.hpp"
 #include "include/MCKeyController.hpp"
 #include "threepp/loaders/AssimpLoader.hpp"
@@ -108,43 +109,13 @@ int main() {
 
     MC mc(Vector3(0, 2 , 0));  // Start at height 2 to be above ground
 
-    // Store all models in a vector - Ducati first
-    // , Speeder second, Bicycle third
-    std::vector<std::shared_ptr<Group>> vehicles = {ducatiModel, speederModel, bicycleModel};
-    int currentVehicleIndex = 0;
+   VehicleManager vehicleManager;
+    vehicleManager.addVehicle(ducatiModel, VehicleStats{30.0f, 15.0f, 14.0f, 1.5f, 2.5f, "Ducati"});
+    vehicleManager.addVehicle(speederModel, VehicleStats{20.0f, 6.0f, 10.0f, 2.0f, 2.3f, "Speeder Bike"});
+    vehicleManager.addVehicle(bicycleModel, VehicleStats{8.0f, 4.0f, 8.0f, 2.5f, 2.0f, "Bicycle"});
 
-    // Vehicle stats: {maxSpeed, acceleration, braking, friction, turn}
-    struct VehicleStats {
-        float maxSpeed;
-        float acceleration;
-        float braking;
-        float friction;
-        float turn;
-        std::string name;
-    };
+    vehicleManager.switchVehicle(0, scene, mc);
 
-    std::vector<VehicleStats> vehicleStats = {
-        {30.0f, 15.0f, 14.0f, 1.5f, 2.5f, "Ducati"},      // Fastest - Key 1
-        {20.0f, 6.0f, 10.0f, 2.0f, 2.3f, "Speeder Bike"}, // Medium - Key 2
-        {8.0f, 4.0f, 8.0f, 2.5f, 2.0f, "Bicycle"}         // Slowest - Key 3
-    };
-
-    // Function to apply vehicle stats
-    auto applyVehicleStats = [&](int index) {
-        const auto& stats = vehicleStats[index];
-        mc.setMaxSpeed(stats.maxSpeed);
-        mc.setAcceleration(stats.acceleration);
-        mc.setBraking(stats.braking);
-        mc.setFriction(stats.friction);
-        mc.setTurn(stats.turn);
-        std::cout << "Switched to: " << stats.name << std::endl;
-    };
-
-    // Set initial vehicle stats
-    applyVehicleStats(currentVehicleIndex);
-
-    // Add initial vehicle to scene
-    scene.add(vehicles[currentVehicleIndex]);
 
     PowerUpManager powerUpManager;
 
@@ -162,17 +133,7 @@ int main() {
 
     // Set up vehicle switching callback
     mcKeyController.onVehicleChange = [&](int newIndex) {
-        if (newIndex >= 0 && newIndex < vehicles.size() && newIndex != currentVehicleIndex) {
-            // Remove current vehicle
-            scene.remove(*vehicles[currentVehicleIndex]);
-
-            // Switch to new vehicle
-            currentVehicleIndex = newIndex;
-            scene.add(vehicles[currentVehicleIndex]);
-
-            // Apply new vehicle stats
-            applyVehicleStats(currentVehicleIndex);
-        }
+        vehicleManager.switchVehicle(newIndex, scene, mc);
     };
 
     canvas.addKeyListener(mcKeyController);
@@ -192,12 +153,7 @@ int main() {
         auto mcPos = mc.getPosition();
         auto mcRot = mc.getRotation();
 
-        // Update current vehicle position and rotation
-        vehicles[currentVehicleIndex]->position.copy(mcPos);
-        vehicles[currentVehicleIndex]->rotation.setFromVector3(mcRot);
-
-        // Apply lean to the vehicle (roll rotation on Z axis)
-        vehicles[currentVehicleIndex]->rotation.z = mc.getCurrentLean();
+        vehicleManager.updateCurrentVehicle(mcPos, mcRot, mc.getCurrentLean());
 
         cameraController.update(mc);
 
