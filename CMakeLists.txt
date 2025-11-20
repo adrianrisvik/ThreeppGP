@@ -55,7 +55,7 @@ add_executable(ThreeppGP main.cpp
         include/OilSpill.hpp
         include/CameraController.hpp
         include/ImguiContext.hpp
-        include/Logo.hpp
+
         include/VehicleStats.hpp
         include/VehicleStats.hpp
         include/Vehicle.hpp
@@ -64,7 +64,7 @@ add_executable(ThreeppGP main.cpp
         src/PowerUpManager.cpp
         src/SpeedBoost.cpp
         src/OilSpill.cpp
-        src/Logo.cpp
+
         src/CameraController.cpp
         src/Vehicle.cpp
         src/VehicleManager.cpp
