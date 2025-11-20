@@ -5,7 +5,6 @@
 
 
 #include "CameraController.hpp"
-#include "VehicleManager.hpp"
 #include "include/MC.hpp"
 #include "include/MCKeyController.hpp"
 #include "threepp/loaders/AssimpLoader.hpp"
@@ -74,22 +73,26 @@ int main() {
 
         MC mc(Vector3(0, 2 , 0));  // Start at height 2 to be above ground
 
-        VehicleManager vehicleManager;
-        vehicleManager.addVehicle(ducatiModel, VehicleStats{30.0f, 15.0f, 14.0f, 1.5f, 2.5f, "Ducati"});
+        // Single-vehicle setup (no Vehicle/VehicleManager)
+        const std::string vehicleName = "Ducati";
+        const float baseMaxSpeed = 30.0f;
+        const float baseAcceleration = 15.0f;
+        const float baseBraking = 14.0f;
+        const float baseFriction = 1.5f;
+        const float baseTurn = 2.5f;
 
-        // No other vehicles; no special initial rotations required
+        // Sync MC physics with the chosen vehicle stats
+        mc.setMaxSpeed(baseMaxSpeed);
+        mc.setAcceleration(baseAcceleration);
+        mc.setBraking(baseBraking);
+        mc.setFriction(baseFriction);
+        mc.setTurn(baseTurn);
 
+        // Add the Ducati model directly to the scene
+        scene.add(*ducatiModel);
 
-        // Add initial Ducati (index 0) to the scene and sync MC stats
-        vehicleManager.addInitialVehicleToScene(scene);
-        {
-            const auto& vStats = vehicleManager.getCurrentVehicle().getStats();
-            mc.setMaxSpeed(vStats.maxSpeed);
-            mc.setAcceleration(vStats.acceleration);
-            mc.setBraking(vStats.braking);
-            mc.setFriction(vStats.friction);
-            mc.setTurn(vStats.turn);
-        }
+        // Optional initial rotation offset for the model
+        Vector3 modelInitialRotation{0, 0, 0};
 
 
         PowerUpManager powerUpManager;
@@ -120,9 +123,8 @@ int main() {
 
             // Vehicle selection removed (only Ducati)
 
-            const auto& stats = vehicleManager.getCurrentVehicle().getStats();
             ImGui::Separator();
-            ImGui::Text("Current: %s", stats.name.c_str());
+            ImGui::Text("Current: %s", vehicleName.c_str());
             // Speed readout and bar
             const float curSpd = mc.getCurrentSpeed();
             const float maxSpd = mc.getMaxSpeed();
@@ -131,7 +133,7 @@ int main() {
             ImGui::ProgressBar(speedRatio, ImVec2(200, 0), "");
 
             // Boost indicator: if current max speed exceeds base vehicle max, show active
-            bool boostActive = maxSpd > stats.maxSpeed * 1.05f; // 5% threshold
+            bool boostActive = maxSpd > baseMaxSpeed * 1.05f; // 5% threshold
             if (boostActive) {
                 ImGui::TextColored(ImVec4(1, 0.8f, 0, 1), "BOOST ACTIVE");
             } else {
@@ -161,7 +163,15 @@ int main() {
                 std::cout << "MC Position: (" << mcPos.x << ", " << mcPos.y << ", " << mcPos.z << ")" << std::endl;
             }
 
-            vehicleManager.updateCurrentVehicle(mcPos, mcRot, mc.getCurrentLean());
+            // Update the single vehicle model transform directly from MC
+            if (ducatiModel) {
+                // Position
+                ducatiModel->position = mcPos;
+                // Rotation: apply initial rotation + mc rotation + lean around Z
+                ducatiModel->rotation.x = modelInitialRotation.x + mcRot.x;
+                ducatiModel->rotation.y = modelInitialRotation.y + mcRot.y;
+                ducatiModel->rotation.z = modelInitialRotation.z + mcRot.z + mc.getCurrentLean();
+            }
 
             cameraController.update(mc);
 

@@ -56,18 +56,11 @@ add_executable(ThreeppGP main.cpp
         include/CameraController.hpp
         include/ImguiContext.hpp
 
-        include/VehicleStats.hpp
-        include/VehicleStats.hpp
-        include/Vehicle.hpp
-        include/VehicleManager.hpp
-
         src/PowerUpManager.cpp
         src/SpeedBoost.cpp
         src/OilSpill.cpp
 
         src/CameraController.cpp
-        src/Vehicle.cpp
-        src/VehicleManager.cpp
 
 )
 target_link_libraries(ThreeppGP PUBLIC threepp::threepp)
