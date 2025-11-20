@@ -1,4 +1,3 @@
-
 #include "PowerUpManager.hpp"
 #include "SpeedBoost.hpp"
 #include "OilSpill.hpp"
@@ -6,7 +5,6 @@
 #include <threepp/threepp.hpp>
 #include <algorithm>
 #include <cmath>
-
 
 PowerUpManager::PowerUpManager() = default;
 
@@ -22,24 +20,24 @@ void PowerUpManager::addOilSpill(const threepp::Vector3& position) {
 
 void PowerUpManager::update(MC& motorcycle, float dt) {
     auto mcPos = motorcycle.getPosition();
-    
+
     for (auto& powerUp : powerUps_) {
         // Check collision
         if (powerUp->checkCollision(mcPos)) {
             powerUp->applyEffect(motorcycle, dt);
         }
-        
+
         // Continue applying effects for duration-based power-ups
         if (powerUp->isEffectActive()) {
             powerUp->applyEffect(motorcycle, dt);
         }
     }
-    
+
     // Remove inactive pickups (not oil spills, they stay)
     powerUps_.erase(
         std::remove_if(powerUps_.begin(), powerUps_.end(),
             [](const std::unique_ptr<PowerUp>& p) {
-                return p->getType() == PowerUpType::SpeedBoost && 
+                return p->getType() == PowerUpType::SpeedBoost &&
                        !p->isActive() && !p->isEffectActive();
             }),
         powerUps_.end()
@@ -48,8 +46,9 @@ void PowerUpManager::update(MC& motorcycle, float dt) {
 
 void PowerUpManager::addToScene(threepp::Scene& scene) {
     for (auto& powerUp : powerUps_) {
-        if (auto* mesh = powerUp->getMesh()) {
-            scene.add(std::shared_ptr<threepp::Object3D>(mesh));
+        auto mesh = powerUp->getMesh();  // Returns shared_ptr now
+        if (mesh) {
+            scene.add(mesh);  // Add the shared_ptr directly
         }
     }
 }
@@ -57,10 +56,10 @@ void PowerUpManager::addToScene(threepp::Scene& scene) {
 void PowerUpManager::animate(float time) {
     for (auto& powerUp : powerUps_) {
         if (powerUp->isActive() && powerUp->getType() == PowerUpType::SpeedBoost) {
-            auto* mesh = powerUp->getMesh();
+            auto mesh = powerUp->getMesh();  // Returns shared_ptr now
             if (mesh) {
-                mesh->rotation.z = time * 2.0f;  // Spin the speed boost
-                mesh->position.y = std::sin(time * 3.0f) * 0.2f + 0.5f;  // Bob up and down
+                mesh->rotation.z = time * 2.0f;
+                mesh->position.y = std::sin(time * 3.0f) * 0.2f + 0.5f;
             }
         }
     }

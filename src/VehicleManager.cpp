@@ -17,9 +17,9 @@ bool VehicleManager::switchVehicle(int index, threepp::Scene& scene, MC& mc) {
     scene.remove(*vehicles_[currentIndex_].getModel());
 
     currentIndex_ = index;
-    const auto& newVehicle = vehicles_[currentIndex_];
+    auto& newVehicle = vehicles_[currentIndex_];
 
-    scene.add(newVehicle.getModel());
+    scene.add(*newVehicle.getModel());
 
     const auto& stats = newVehicle.getStats();
     mc.setMaxSpeed(stats.maxSpeed);
@@ -42,7 +42,6 @@ void VehicleManager::updateCurrentVehicle(const threepp::Vector3& position,
 }
 void VehicleManager::addInitialVehicleToScene(threepp::Scene& scene) {
     if (!vehicles_.empty()) {
-        scene.add(vehicles_[currentIndex_].getModel());
+        scene.add(*vehicles_[currentIndex_].getModel());
     }
 }
-    

@@ -21,10 +21,10 @@ public:
 
     // Called when motorcycle collides with this power-up
     virtual void applyEffect(MC& motorcycle, float dt) = 0;
-    
+
     // Check if effect is still active
     virtual bool isEffectActive() const { return active_; }
-    
+
     // Check collision with motorcycle
     bool checkCollision(const threepp::Vector3& mcPosition) const {
         if (!active_) return false;
@@ -38,9 +38,9 @@ public:
     PowerUpType getType() const { return type_; }
     bool isActive() const { return active_; }
     void setActive(bool active) { active_ = active; }
-    
+
     // Get the visual mesh for rendering
-    virtual threepp::Mesh* getMesh() { return mesh_.get(); }
+    std::shared_ptr<threepp::Mesh> getMesh() { return mesh_; }
 
 protected:
     threepp::Vector3 position_;

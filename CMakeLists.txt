@@ -37,8 +37,6 @@ add_library(imgui_lib
         ${imgui_SOURCE_DIR}/imgui_widgets.cpp
         ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-        include/VehicleStats.hpp
-        include/Vehicle.hpp
 )
 
 target_include_directories(imgui_lib PUBLIC
@@ -57,24 +55,21 @@ add_executable(ThreeppGP main.cpp
         include/OilSpill.hpp
         include/CameraController.hpp
         include/ImguiContext.hpp
+        include/Logo.hpp
+        include/VehicleStats.hpp
+        include/VehicleStats.hpp
+        include/Vehicle.hpp
+        include/VehicleManager.hpp
 
         src/PowerUpManager.cpp
         src/SpeedBoost.cpp
         src/OilSpill.cpp
         src/Logo.cpp
-        include/Logo.hpp
         src/CameraController.cpp
-        src/VehicleStats.cpp
-        include/VehicleStats.hpp
-        include/VehicleStats.hpp
         src/Vehicle.cpp
-        include/Vehicle.hpp
-        include/Vehicle.hpp
         src/VehicleManager.cpp
-        include/VehicleManager.hpp
+
 )
-
-
 target_link_libraries(ThreeppGP PUBLIC threepp::threepp)
 target_link_libraries(ThreeppGP PUBLIC assimp::assimp)
 target_link_libraries(ThreeppGP PUBLIC imgui_lib)

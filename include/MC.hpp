@@ -76,12 +76,19 @@ public:
         currentLean_ += leanDiff * leanSpeed_ * dt;
     }
 
-    threepp::Vector3 getPosition() {
+    threepp::Vector3 getPosition() const {
         return position_;
     }
 
-    threepp::Vector3 getRotation() {
+    threepp::Vector3 getRotation() const {
         return rotation_;
+    }
+
+    // Rotation used for rendering only (adds a temporary visual yaw offset).
+    threepp::Vector3 getVisualRotation() const {
+        threepp::Vector3 r = rotation_;
+        r.y += visualYawOffset_;
+        return r;
     }
 
     float getCurrentSpeed() const {
@@ -131,6 +138,18 @@ public:
         rotation_.y += spinAmount;
     }
 
+    // Directly set current speed (useful for special effects like OilSpill)
+    void setCurrentSpeed(float speed) { currentSpeed_ = speed; }
+
+    // Getters for tuning/restoring physics parameters
+    float getFriction() const { return friction_; }
+    float getTurn() const { return turn_; }
+
+    // Visual spin overlay controls (do not affect movement direction)
+    void addVisualYaw(float d) { visualYawOffset_ += d; }
+    void setVisualYawOffset(float y) { visualYawOffset_ = y; }
+    float getVisualYawOffset() const { return visualYawOffset_; }
+
 private:
     float maxSpeed_ = 10.0f;
     float currentSpeed_ = 0.0f;
@@ -144,6 +163,7 @@ private:
     float targetLean_ = 0.0f;
     threepp::Vector3 position_;
     threepp::Vector3 rotation_;
+    float visualYawOffset_{0.0f};
 };
 
 

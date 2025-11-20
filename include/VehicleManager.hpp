@@ -27,6 +27,10 @@ public:
     int getCurrentVehicleIndex() const { return currentIndex_; }
     size_t getVehicleCount() const { return vehicles_.size(); }
     const Vehicle& getCurrentVehicle() const { return vehicles_[currentIndex_]; }
+    
+    Vehicle& getVehicle(int index) {
+        return vehicles_[index];
+    }
 
     void addInitialVehicleToScene(threepp::Scene& scene);
 

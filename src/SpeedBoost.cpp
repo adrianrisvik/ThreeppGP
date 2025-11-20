@@ -16,18 +16,28 @@ SpeedBoost::SpeedBoost(const threepp::Vector3& position, float radius,
 
 void SpeedBoost::applyEffect(MC& motorcycle, float dt) {
     if (!active_) {
-        // Effect is ongoing, count down
+        // Effect is ongoing, count down (no extra visuals during boost)
         timeRemaining_ -= dt;
         if (timeRemaining_ <= 0.0f) {
             // Restore original speed
             motorcycle.setMaxSpeed(originalMaxSpeed_);
+            // Mesh remains hidden; manager will remove this pickup later
         }
     } else {
         // First time pickup
         active_ = false;  // Mark as collected
         timeRemaining_ = duration_;
         originalMaxSpeed_ = motorcycle.getMaxSpeed();
-        motorcycle.setMaxSpeed(originalMaxSpeed_ * speedMultiplier_);
+        const float boostedMax = originalMaxSpeed_ * speedMultiplier_;
+        motorcycle.setMaxSpeed(boostedMax);
+        // Kick an immediate speed impulse so the boost feels a lot faster right away
+        // Aim for ~85% of boosted max speed (but do not exceed it)
+        const float targetSpeed = boostedMax * 0.85f;
+        if (motorcycle.getCurrentSpeed() < targetSpeed) {
+            motorcycle.setCurrentSpeed(targetSpeed);
+        }
+        // Hide the pickup mesh immediately for a cleaner look
+        if (mesh_) mesh_->visible = false;
     }
 }
 
