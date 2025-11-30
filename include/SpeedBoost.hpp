@@ -2,7 +2,11 @@
 #define THREEPPGP_SPEEDBOOST_HPP
 
 #include "PowerUp.hpp"
-#include <threepp/threepp.hpp>
+
+// Forward declarations instead of full include
+namespace threepp {
+    class Vector3;
+}
 
 class MC; // Forward declaration
 

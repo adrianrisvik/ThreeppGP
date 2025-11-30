@@ -10,8 +10,8 @@
 
 class MC {
 public:
-    explicit MC(const threepp::Vector3 InitialPos = {})
-    : position_(InitialPos) {
+    explicit MC(const threepp::Vector3 InitialPos = {}, const threepp::Vector3 InitialRot = {})
+    : position_(InitialPos), rotation_(InitialRot) {
     }
 
     void accelerateForward(float dt) {
@@ -80,8 +80,17 @@ public:
         return position_;
     }
 
+    void setPosition(const threepp::Vector3& p) {
+        position_ = p;
+    }
+
     threepp::Vector3 getRotation() const {
         return rotation_;
+    }
+
+    // Add this method
+    void setRotation(const threepp::Vector3& r) {
+        rotation_ = r;
     }
 
     // Rotation used for rendering only (adds a temporary visual yaw offset).

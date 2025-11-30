@@ -3,9 +3,12 @@
 #define THREEPPGP_POWERUPMANAGER_HPP
 
 #include "PowerUp.hpp"
-#include <threepp/threepp.hpp>
 #include <vector>
 #include <memory>
+
+namespace threepp {
+    class Scene;
+}
 
 class MC;
 

@@ -2,7 +2,7 @@
 #define THREEPPGP_OILSPILL_HPP
 
 #include "PowerUp.hpp"
-#include <threepp/threepp.hpp>
+
 
 class MC;
 
