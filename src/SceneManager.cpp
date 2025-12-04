@@ -6,6 +6,7 @@
 #include <threepp/threepp.hpp>
 #include <threepp/loaders/AssimpLoader.hpp>
 #include <iostream>
+#include <threepp/materials/MeshStandardMaterial.hpp>
 
 using namespace threepp;
 
@@ -14,7 +15,6 @@ SceneManager::SceneManager() = default;
 void SceneManager::setupScene(Scene& scene) {
     scene.background = Color::aliceblue;
     createLighting(scene);
-    createGround(scene);
     createGrid(scene);
 }
 
@@ -31,20 +31,103 @@ void SceneManager::createLighting(Scene& scene) {
     scene.add(directionalLight2);
 }
 
-void SceneManager::createGround(Scene& scene) {
-    auto groundGeo = PlaneGeometry::create(1000, 1000);
-    auto groundMat = MeshLambertMaterial::create();
-    groundMat->color = 0x2e8b57; // sea green
-    auto ground = Mesh::create(groundGeo, groundMat);
-    ground->rotation.x = -math::PI / 2.0f; // lay flat
-    ground->position.y = 0.0f;
-    scene.add(ground);
-}
-
 void SceneManager::createGrid(Scene& scene) {
     auto grid = GridHelper::create();
     scene.add(grid);
 }
+
+// Add this improved helper function
+// void SceneManager::upgradeMaterials(threepp::Group& group) {
+//     group.traverse([](threepp::Object3D& obj) {
+//         if (auto mesh = dynamic_cast<threepp::Mesh*>(&obj)) {
+//             auto currentMat = mesh->material();
+//             if (currentMat) {
+//                 auto newMat = MeshStandardMaterial::create();
+//
+//                 // Type-safe copying
+//                 if (auto basicMat = std::dynamic_pointer_cast<MeshBasicMaterial>(currentMat)) {
+//                     newMat->color = basicMat->color;
+//                     newMat->map = basicMat->map;
+//                     newMat->roughness = 0.8f;  // Higher for less shine
+//                     newMat->metalness = 0.0f;
+//                 } else if (auto lambertMat = std::dynamic_pointer_cast<MeshLambertMaterial>(currentMat)) {
+//                     newMat->color = lambertMat->color;
+//                     newMat->map = lambertMat->map;
+//                     newMat->emissive = lambertMat->emissive;
+//                     newMat->roughness = 0.7f;
+//                     newMat->metalness = 0.0f;  // Non-metallic
+//                 } else if (auto phongMat = std::dynamic_pointer_cast<MeshPhongMaterial>(currentMat)) {
+//                     newMat->color = phongMat->color;
+//                     newMat->map = phongMat->map;
+//                     newMat->emissive = phongMat->emissive;
+//                     newMat->roughness = 0.8f - (phongMat->shininess / 256.0f);  // Adjusted for less shine
+//                     newMat->metalness = 0.0f;
+//                 } else {
+//                     // Fallback: Neutral defaults with texture check
+//                     newMat->color.setRGB(0.5f, 0.5f, 0.5f);
+//                     newMat->roughness = 0.8f;
+//                     newMat->metalness = 0.0f;
+//                 }
+//
+//                 // Anti-white safeguard
+//                 if (newMat->color.equals(Color(1,1,1)) && !newMat->map) {
+//                     newMat->color.setRGB(0.8f, 0.8f, 0.8f);
+//                 }
+//
+//                 // Log for debugging textures
+//                 std::cout << "Material upgraded - Color: " << newMat->color.r << ", " << newMat->color.g << ", " << newMat->color.b
+//                           << " | Texture: " << (newMat->map ? "Loaded" : "Missing") << std::endl;
+//
+//                 // Enable shadows
+//                 //newMat->receiveShadow = true;
+//                 //newMat->castShadow = true;
+//
+//                 mesh->setMaterial(newMat);
+//             }
+//         }
+//     });
+// }
+
+void SceneManager::upgradeMaterials(threepp::Group& group) {
+    group.traverse([](threepp::Object3D& obj) {
+        auto mesh = dynamic_cast<threepp::Mesh*>(&obj);
+        if (!mesh) return;
+
+        auto currentMat = mesh->material();
+        if (!currentMat) return;
+
+        auto newMat = MeshStandardMaterial::create();
+
+        // Copy diffuse (map_Kd)
+        if (auto phongMat = std::dynamic_pointer_cast<MeshPhongMaterial>(currentMat)) {
+            newMat->color = phongMat->color;
+            if (phongMat->map) newMat->map = phongMat->map; // diffuse
+            if (phongMat->normalMap) newMat->normalMap = phongMat->normalMap;
+            if (phongMat->specularMap) newMat->metalnessMap = phongMat->specularMap;
+            newMat->emissive = phongMat->emissive; // ambient/emissive
+        } else if (auto lambertMat = std::dynamic_pointer_cast<MeshLambertMaterial>(currentMat)) {
+            newMat->color = lambertMat->color;
+            if (lambertMat->map) newMat->map = lambertMat->map;
+            newMat->emissive = lambertMat->emissive;
+        } else if (auto basicMat = std::dynamic_pointer_cast<MeshBasicMaterial>(currentMat)) {
+            newMat->color = basicMat->color;
+            if (basicMat->map) newMat->map = basicMat->map;
+        }
+
+        // Set PBR defaults
+        newMat->roughness = 0.8f;
+        newMat->metalness = 0.0f;
+
+        mesh->setMaterial(newMat);
+
+        // Debug log
+        std::cout << "[INFO] Mesh: " << mesh->name
+                  << " | Diffuse: " << (newMat->map ? "Loaded" : "Missing")
+                  << " | Normal: " << (newMat->normalMap ? "Loaded" : "Missing")
+                  << std::endl;
+    });
+}
+
 
 bool SceneManager::loadSceneModel(const std::string& filePath) {
     threepp::AssimpLoader loader;
@@ -53,6 +136,9 @@ bool SceneManager::loadSceneModel(const std::string& filePath) {
         std::cerr << "Failed to load scene model: " << filePath << std::endl;
         return false;
     }
+    upgradeMaterials(*loaded);
+
+
 
     // Basic normalization: ensure model is visible and above ground
     loaded->position.y = 0.0f;

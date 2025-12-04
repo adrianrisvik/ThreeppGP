@@ -61,8 +61,8 @@ add_executable(ThreeppGP
         include/CameraController.hpp
         include/ImguiContext.hpp
         include/SceneManager.hpp
-        include/VehicleSystem.hpp
         include/UI.hpp
+        include/VehicleLoader.hpp  # Add this
         
         # Source files
         src/PowerUpManager.cpp
@@ -71,17 +71,23 @@ add_executable(ThreeppGP
         src/CameraController.cpp
         src/SceneManager.cpp
         src/UI.cpp
+        src/VehicleLoader.cpp  # Add this
 )
 
 # ============ PRECOMPILED HEADERS - ADD THIS! ============
 target_precompile_headers(ThreeppGP PRIVATE
-    <threepp/threepp.hpp>
-    <threepp/loaders/AssimpLoader.hpp>
-    <threepp/extras/imgui/ImguiContext.hpp>
-    <memory>
-    <vector>
-    <string>
-    <iostream>
+        <threepp/threepp.hpp>
+        <threepp/loaders/AssimpLoader.hpp>
+        <threepp/extras/imgui/ImguiContext.hpp>
+        <threepp/core/Scene.hpp>      # Add if using scenes
+        <threepp/lights/Light.hpp>    # Add if using lights
+        <threepp/cameras/Camera.hpp>  # Add if using cameras
+        <threepp/materials/MeshStandardMaterial.hpp>  # Add if using materials
+        <memory>
+        <vector>
+        <string>
+        <iostream>
+
 )
 # =========================================================
 target_link_libraries(ThreeppGP PUBLIC threepp::threepp)

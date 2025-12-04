@@ -20,7 +20,8 @@ class MC;
 class VehicleLoader {
 public:
     VehicleLoader();
-    
+
+    static void upgradeMaterials(threepp::Group& group);
     bool loadVehicle(const std::string& modelPath);
     void addToScene(threepp::Scene& scene);
     void updateTransform(const MC& mc, const threepp::Vector3& initialRotation);

@@ -20,7 +20,7 @@ void VehicleLoader::upgradeMaterials(threepp::Group& group) {
             // --- FIX #2: Convert to MeshStandardMaterial if needed ---
             // (This preserves textures AND enables PBR params)
             if (!dynamic_cast<MeshStandardMaterial*>(mat.get())) {
-                auto standardMat = std::make_shared<MeshStandardMaterial>();
+                auto standardMat = threepp::MeshStandardMaterial::create();
 
                 // Copy texture if there is one
                 standardMat->map = mat->map;
@@ -44,7 +44,6 @@ void VehicleLoader::upgradeMaterials(threepp::Group& group) {
         }
     });
 }
-
 bool VehicleLoader::loadVehicle(const std::string& modelPath) {
 
     AssimpLoader loader;

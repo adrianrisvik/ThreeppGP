@@ -24,9 +24,10 @@ public:
     std::shared_ptr<threepp::Group> getLoadedModel() const { return loadedModel_; }
     
 private:
-    void createLighting(threepp::Scene& scene);
-    void createGround(threepp::Scene& scene);
+    static void createLighting(threepp::Scene& scene);
+    //void createGround(threepp::Scene& scene);
     void createGrid(threepp::Scene& scene);
+    static void upgradeMaterials(threepp::Group& group);
     std::shared_ptr<threepp::Group> loadedModel_{}; // stored (not auto-added) model
 };
 
