@@ -1,25 +1,65 @@
 #include "../include/VehicleLoader.hpp"
-#include "MC.hpp"
-#include <threepp/threepp.hpp>
-#include <threepp/loaders/AssimpLoader.hpp>
+#include "../include/MC.hpp"
 #include <iostream>
+#include "../include/SceneManager.hpp"
 
 using namespace threepp;
 
 VehicleLoader::VehicleLoader() = default;
 
+void VehicleLoader::upgradeMaterials(threepp::Group& group) {
+
+    group.traverse([](threepp::Object3D& obj) {
+
+        if (auto mesh = dynamic_cast<threepp::Mesh*>(&obj)) {
+
+            // If the mesh has NO material, skip it
+            auto mat = mesh->material();
+            if (!mat) return;
+
+            // --- FIX #2: Convert to MeshStandardMaterial if needed ---
+            // (This preserves textures AND enables PBR params)
+            if (!dynamic_cast<MeshStandardMaterial*>(mat.get())) {
+                auto standardMat = std::make_shared<MeshStandardMaterial>();
+
+                // Copy texture if there is one
+                standardMat->map = mat->map;
+
+                // Copy base color
+                standardMat->color = mat->color;
+
+                mesh->setMaterial(standardMat);
+                mat = standardMat;
+            }
+
+            // Now safe to edit material:
+            auto* sm = dynamic_cast<MeshStandardMaterial*>(mat.get());
+            sm->roughness = 0.8f;
+            sm->metalness = 0.0f;
+
+            std::cout << "Vehicle material - Color: "
+                      << sm->color.r << ", " << sm->color.g << ", " << sm->color.b
+                      << " | Texture: " << (sm->map ? "Loaded" : "Missing")
+                      << std::endl;
+        }
+    });
+}
+
 bool VehicleLoader::loadVehicle(const std::string& modelPath) {
+
     AssimpLoader loader;
+
     model_ = loader.load(modelPath);
-    
     if (!model_) {
         std::cerr << "Failed to load vehicle model: " << modelPath << std::endl;
         return false;
     }
-    
+
+    upgradeMaterials(*model_);
+
     model_->scale.set(0.03f, 0.03f, 0.03f);
     model_->position.y = -0.5f;
-    
+
     return true;
 }
 
@@ -31,10 +71,10 @@ void VehicleLoader::addToScene(Scene& scene) {
 
 void VehicleLoader::updateTransform(const MC& mc, const Vector3& initialRotation) {
     if (!model_) return;
-    
+
     auto mcPos = mc.getPosition();
     auto mcRot = mc.getVisualRotation();
-    
+
     model_->position = mcPos;
     model_->rotation.x = initialRotation.x + mcRot.x;
     model_->rotation.y = initialRotation.y + mcRot.y;
