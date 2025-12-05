@@ -1,0 +1,8 @@
+{"name": "ThreeppGP",
+  "version-string": "0.1.0",
+  "dependencies": [
+    "bullet3"
+
+  ]
+
+}

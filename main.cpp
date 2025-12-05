@@ -63,8 +63,8 @@ int main() {
     powerUpManager.addSpeedBoost(Vector3(-1023, 0, -223));
     powerUpManager.addSpeedBoost(Vector3(-1040, 0, 76));
     powerUpManager.addSpeedBoost(Vector3(-1046, 0, 88));
-    powerUpManager.addSpeedBoost(Vector3(-255, 0, 923));
-    powerUpManager.addSpeedBoost(Vector3(-264, 0, 914));
+    powerUpManager.addSpeedBoost(Vector3(-277, 0, 916));
+    powerUpManager.addSpeedBoost(Vector3(-270, 0, 910));
 
     powerUpManager.addOilSpill(Vector3(15, 0, 0));
     powerUpManager.addOilSpill(Vector3(-1016, 0, -202));

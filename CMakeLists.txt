@@ -4,6 +4,8 @@ project(ThreeppGP)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
+enable_testing()
+
 include(FetchContent)
 set(THREEPP_BUILD_TESTS OFF)
 set(THREEPP_BUILD_EXAMPLES OFF)
@@ -14,6 +16,8 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/markaren/threepp.git
         GIT_TAG 619cdaacc2e7dc6ea709d8c7f482e2994af7349d
 )
+
+
 FetchContent_Declare(
         assimp
         GIT_REPOSITORY https://github.com/assimp/assimp.git
@@ -24,11 +28,16 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/ocornut/imgui.git
         GIT_TAG docking
 )
-
+FetchContent_Declare(
+        catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG v3.11.0
+)
 
 FetchContent_MakeAvailable(threepp)
 FetchContent_MakeAvailable(assimp)
 FetchContent_MakeAvailable(imgui)
+FetchContent_MakeAvailable(catch2)
 
 # Create ImGui library
 add_library(imgui_lib
@@ -71,7 +80,9 @@ add_executable(ThreeppGP
         src/CameraController.cpp
         src/SceneManager.cpp
         src/UI.cpp
-        src/VehicleLoader.cpp  # Add this
+        src/VehicleLoader.cpp
+        src/Physics.cpp
+        include/Physics.hpp  # Add this
 )
 
 # ============ PRECOMPILED HEADERS - ADD THIS! ============
@@ -79,7 +90,7 @@ target_precompile_headers(ThreeppGP PRIVATE
         <threepp/threepp.hpp>
         <threepp/loaders/AssimpLoader.hpp>
         <threepp/extras/imgui/ImguiContext.hpp>
-        <threepp/core/Scene.hpp>      # Add if using scenes
+        <threepp/scenes/Scene.hpp>      # Add if using scenes
         <threepp/lights/Light.hpp>    # Add if using lights
         <threepp/cameras/Camera.hpp>  # Add if using cameras
         <threepp/materials/MeshStandardMaterial.hpp>  # Add if using materials
@@ -98,3 +109,4 @@ target_include_directories(ThreeppGP PUBLIC "include")
 target_include_directories(ThreeppGP PUBLIC "models")
 target_include_directories(ThreeppGP PUBLIC "src")
 
+add_subdirectory(tests)

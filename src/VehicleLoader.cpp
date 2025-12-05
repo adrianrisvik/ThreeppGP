@@ -2,6 +2,9 @@
 #include "../include/MC.hpp"
 #include <iostream>
 #include "../include/SceneManager.hpp"
+#include <threepp/loaders/AssimpLoader.hpp>
+#include <threepp/threepp.hpp>
+
 
 using namespace threepp;
 
@@ -23,10 +26,10 @@ void VehicleLoader::upgradeMaterials(threepp::Group& group) {
                 auto standardMat = threepp::MeshStandardMaterial::create();
 
                 // Copy texture if there is one
-                standardMat->map = mat->map;
+                //standardMat->map = mat->map;
 
                 // Copy base color
-                standardMat->color = mat->color;
+                //standardMat->color = mat->color;
 
                 mesh->setMaterial(standardMat);
                 mat = standardMat;
