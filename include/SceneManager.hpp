@@ -15,12 +15,9 @@ public:
     SceneManager();
     
     void setupScene(threepp::Scene& scene);
-    
-    // Load an external scene/model (OBJ/GLB) but do not add it to the scene yet
     bool loadSceneModel(const std::string& filePath);
     // Add the previously loaded scene/model to the given scene
     void addLoadedToScene(threepp::Scene& scene);
-    // Access the loaded model (may be null if nothing is loaded)
     std::shared_ptr<threepp::Group> getLoadedModel() const { return loadedModel_; }
     
 private:

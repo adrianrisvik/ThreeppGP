@@ -42,16 +42,16 @@ int main() {
     vehicleLoader.addToScene(scene);
 
     // MC (physics) setup and start pos
-    MC mc(Vector3(-836, 2, -170));
+    MC mc(Vector3(-836, 1, -170));
 
     // MC Start rot, physics and visuals
     threepp::Vector3 startRotation{0, threepp::math::PI / 4, 0};
     mc.setRotation(startRotation);
 
-    const float baseMaxSpeed = 80.0f;
+    const float baseMaxSpeed = 100.0f;
     mc.setMaxSpeed(baseMaxSpeed);
     mc.setAcceleration(15.0f);
-    mc.setBraking(14.0f);
+    mc.setBraking(30.0f);
     mc.setFriction(1.5f);
     mc.setTurn(2.5f);
 
@@ -63,9 +63,14 @@ int main() {
     powerUpManager.addSpeedBoost(Vector3(-1023, 0, -223));
     powerUpManager.addSpeedBoost(Vector3(-1040, 0, 76));
     powerUpManager.addSpeedBoost(Vector3(-1046, 0, 88));
+    powerUpManager.addSpeedBoost(Vector3(-255, 0, 923));
+    powerUpManager.addSpeedBoost(Vector3(-264, 0, 914));
+
     powerUpManager.addOilSpill(Vector3(15, 0, 0));
     powerUpManager.addOilSpill(Vector3(-1016, 0, -202));
     powerUpManager.addOilSpill(Vector3(-1178, 0, -39));
+    powerUpManager.addOilSpill(Vector3(-262, 0, -918));
+
     powerUpManager.addToScene(scene);
 
     // UI setup
@@ -97,6 +102,5 @@ int main() {
             std::cout << "MC Position: (" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
         }
     });
-
     return 0;
 }

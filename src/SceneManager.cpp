@@ -136,7 +136,7 @@ bool SceneManager::loadSceneModel(const std::string& filePath) {
         std::cerr << "Failed to load scene model: " << filePath << std::endl;
         return false;
     }
-    upgradeMaterials(*loaded);
+   // upgradeMaterials(*loaded);
 
 
 
