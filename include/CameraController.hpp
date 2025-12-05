@@ -11,8 +11,8 @@
 class CameraController {
 public:
     CameraController(threepp::PerspectiveCamera& camera, 
-                     float distanceBehind = 5.0f, 
-                     float heightAbove = 3.0f);
+                     float distanceBehind = 8.0f,
+                     float heightAbove = 3.5f);
 
     // Update camera position and orientation based on target
     void update(const MC& target);

@@ -49,7 +49,7 @@ void SpeedBoost::createMesh() {
     // Create a rotating ring/star shape for speed boost
     auto geometry = threepp::TorusGeometry::create(0.5f, 0.2f, 8, 16);
     auto material = threepp::MeshPhongMaterial::create();
-    material->color = threepp::Color(0xFFFF00);  // Yellow - use hex constructor
+    material->color = threepp::Color(0x800080);  // Yellow - use hex constructor
     material->emissive = threepp::Color(0xFFA500);  // Orange - use hex constructor
     material->emissiveIntensity = 0.5f;
 

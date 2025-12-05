@@ -13,7 +13,7 @@ class MC; // Forward declaration
 class SpeedBoost : public PowerUp {
 public:
     SpeedBoost(const threepp::Vector3& position, float radius = 1.0f,
-                float speedMultiplier = 5.0f, float duration = 5.0f);
+                float speedMultiplier = 3.0f, float duration = 5.0f);
 
     void applyEffect(MC& motorcycle, float dt) override;
     bool isEffectActive() const override;

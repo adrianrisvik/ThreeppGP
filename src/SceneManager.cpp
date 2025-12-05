@@ -88,45 +88,45 @@ void SceneManager::createGrid(Scene& scene) {
 //     });
 // }
 
-void SceneManager::upgradeMaterials(threepp::Group& group) {
-    group.traverse([](threepp::Object3D& obj) {
-        auto mesh = dynamic_cast<threepp::Mesh*>(&obj);
-        if (!mesh) return;
-
-        auto currentMat = mesh->material();
-        if (!currentMat) return;
-
-        auto newMat = MeshStandardMaterial::create();
-
-        // Copy diffuse (map_Kd)
-        if (auto phongMat = std::dynamic_pointer_cast<MeshPhongMaterial>(currentMat)) {
-            newMat->color = phongMat->color;
-            if (phongMat->map) newMat->map = phongMat->map; // diffuse
-            if (phongMat->normalMap) newMat->normalMap = phongMat->normalMap;
-            if (phongMat->specularMap) newMat->metalnessMap = phongMat->specularMap;
-            newMat->emissive = phongMat->emissive; // ambient/emissive
-        } else if (auto lambertMat = std::dynamic_pointer_cast<MeshLambertMaterial>(currentMat)) {
-            newMat->color = lambertMat->color;
-            if (lambertMat->map) newMat->map = lambertMat->map;
-            newMat->emissive = lambertMat->emissive;
-        } else if (auto basicMat = std::dynamic_pointer_cast<MeshBasicMaterial>(currentMat)) {
-            newMat->color = basicMat->color;
-            if (basicMat->map) newMat->map = basicMat->map;
-        }
-
-        // Set PBR defaults
-        newMat->roughness = 0.8f;
-        newMat->metalness = 0.0f;
-
-        mesh->setMaterial(newMat);
-
-        // Debug log
-        std::cout << "[INFO] Mesh: " << mesh->name
-                  << " | Diffuse: " << (newMat->map ? "Loaded" : "Missing")
-                  << " | Normal: " << (newMat->normalMap ? "Loaded" : "Missing")
-                  << std::endl;
-    });
-}
+// void SceneManager::upgradeMaterials(threepp::Group& group) {
+//     group.traverse([](threepp::Object3D& obj) {
+//         auto mesh = dynamic_cast<threepp::Mesh*>(&obj);
+//         if (!mesh) return;
+//
+//         auto currentMat = mesh->material();
+//         if (!currentMat) return;
+//
+//         auto newMat = MeshStandardMaterial::create();
+//
+//         // Copy diffuse (map_Kd)
+//         if (auto phongMat = std::dynamic_pointer_cast<MeshPhongMaterial>(currentMat)) {
+//             newMat->color = phongMat->color;
+//             if (phongMat->map) newMat->map = phongMat->map; // diffuse
+//             if (phongMat->normalMap) newMat->normalMap = phongMat->normalMap;
+//             if (phongMat->specularMap) newMat->metalnessMap = phongMat->specularMap;
+//             newMat->emissive = phongMat->emissive; // ambient/emissive
+//         } else if (auto lambertMat = std::dynamic_pointer_cast<MeshLambertMaterial>(currentMat)) {
+//             newMat->color = lambertMat->color;
+//             if (lambertMat->map) newMat->map = lambertMat->map;
+//             newMat->emissive = lambertMat->emissive;
+//         } else if (auto basicMat = std::dynamic_pointer_cast<MeshBasicMaterial>(currentMat)) {
+//             newMat->color = basicMat->color;
+//             if (basicMat->map) newMat->map = basicMat->map;
+//         }
+//
+//         // Set PBR defaults
+//         newMat->roughness = 0.8f;
+//         newMat->metalness = 0.0f;
+//
+//         mesh->setMaterial(newMat);
+//
+//         // Debug log
+//         std::cout << "[INFO] Mesh: " << mesh->name
+//                   << " | Diffuse: " << (newMat->map ? "Loaded" : "Missing")
+//                   << " | Normal: " << (newMat->normalMap ? "Loaded" : "Missing")
+//                   << std::endl;
+//     });
+// }
 
 
 bool SceneManager::loadSceneModel(const std::string& filePath) {

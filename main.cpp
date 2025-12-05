@@ -7,7 +7,7 @@
 #include "CameraController.hpp"
 #include "PowerUpManager.hpp"
 #include "SceneManager.hpp"
-#include "include/VehicleSystem.hpp"
+#include "include/VehicleLoader.hpp"
 #include "include/UI.hpp"
 
 using namespace threepp;
@@ -20,15 +20,13 @@ int main() {
     // Scene setup
     SceneManager sceneManager;
     sceneManager.setupScene(scene);
-    // Load external scene (OBJ/GLB)
-    // You can change the path to any .obj/.glb you want to load
     sceneManager.loadSceneModel("models/ArgentinaTrack/source/PistaArgentina2.obj");
     sceneManager.addLoadedToScene(scene);
     
     // Camera setup
     PerspectiveCamera camera(75, canvas.aspect(), 0.1, 1000);
     camera.position.set(0, 2, -5);
-    CameraController cameraController(camera, 5.0f, 3.0f);
+    CameraController cameraController(camera, 8.0f, 3.0f);
     
     canvas.onWindowResize([&](WindowSize size) {
         camera.aspect = size.aspect();
@@ -43,14 +41,14 @@ int main() {
     }
     vehicleLoader.addToScene(scene);
 
-    // MC (physics) setup
+    // MC (physics) setup and start pos
     MC mc(Vector3(-836, 2, -170));
 
-    // Set starting rotation - this is stored in MC and affects both physics and visuals
+    // MC Start rot, physics and visuals
     threepp::Vector3 startRotation{0, threepp::math::PI / 4, 0};
     mc.setRotation(startRotation);
 
-    const float baseMaxSpeed = 30.0f;
+    const float baseMaxSpeed = 80.0f;
     mc.setMaxSpeed(baseMaxSpeed);
     mc.setAcceleration(15.0f);
     mc.setBraking(14.0f);
@@ -60,7 +58,7 @@ int main() {
     MCKeyController mcKeyController(mc);
     canvas.addKeyListener(mcKeyController);
 
-    // Power-ups setup
+    // Power-ups setup and spawn locations
     PowerUpManager powerUpManager;
     powerUpManager.addSpeedBoost(Vector3(-1023, 0, -223));
     powerUpManager.addSpeedBoost(Vector3(-1040, 0, 76));
@@ -90,6 +88,8 @@ int main() {
         
         cameraController.update(mc);
         renderer.render(scene, camera);
+
+        ui.render();
 
         static int frameCount = 0;
         if (++frameCount % 60 == 0) {
