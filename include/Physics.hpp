@@ -8,7 +8,7 @@
 #include <threepp/math/Vector3.hpp>
 #include <threepp/objects/Mesh.hpp>
 #include "MC.hpp"
-#include <btBulletDynamicsCommon.hpp>
+#include <btBulletDynamicsCommon.h>
 #include <BulletCollision/CollisionShapes/btBvhTriangleMeshShape.h>
 #include <BulletCollision/CollisionShapes/btTriangleMesh.h>
 

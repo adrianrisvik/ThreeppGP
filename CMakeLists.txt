@@ -96,5 +96,6 @@ find_package(Bullet CONFIG REQUIRED)
 target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
 target_link_libraries(ThreeppGP PRIVATE BulletDynamics BulletCollision LinearMath)
 target_include_directories(ThreeppGP PUBLIC "include" "models" "src")
+include_directories(${BULLET_INCLUDE_DIRS})
 
 add_subdirectory(tests)
