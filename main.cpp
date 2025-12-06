@@ -9,6 +9,7 @@
 #include "SceneManager.hpp"
 #include "include/VehicleLoader.hpp"
 #include "include/UI.hpp"
+#include "Physics.hpp"
 
 using namespace threepp;
 
@@ -24,7 +25,7 @@ int main() {
     sceneManager.addLoadedToScene(scene);
     
     // Camera setup
-    PerspectiveCamera camera(75, canvas.aspect(), 0.1, 1000);
+    PerspectiveCamera camera(75, canvas.aspect(), 0.1, 2000);
     camera.position.set(0, 2, -5);
     CameraController cameraController(camera, 8.0f, 3.0f);
     
@@ -57,6 +58,10 @@ int main() {
 
     MCKeyController mcKeyController(mc);
     canvas.addKeyListener(mcKeyController);
+
+    //Physics
+    Physics physics(-9.8f, 0.0f);
+
 
     // Power-ups setup and spawn locations
     PowerUpManager powerUpManager;
@@ -101,6 +106,8 @@ int main() {
             auto pos = mc.getPosition();
             std::cout << "MC Position: (" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
         }
+        float deltaTime = 0.016f; // or calculate dynamically
+        physics.update(mc, deltaTime);
     });
     return 0;
 }

@@ -16,8 +16,6 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/markaren/threepp.git
         GIT_TAG 619cdaacc2e7dc6ea709d8c7f482e2994af7349d
 )
-
-
 FetchContent_Declare(
         assimp
         GIT_REPOSITORY https://github.com/assimp/assimp.git
@@ -91,8 +89,12 @@ target_precompile_headers(ThreeppGP PRIVATE
         <iostream>
 )
 # =========================================================
-target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
-target_include_directories(ThreeppGP PUBLIC "include" "models" "src")
 
+
+find_package(Bullet CONFIG REQUIRED)
+
+target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
+target_link_libraries(ThreeppGP PRIVATE BulletDynamics BulletCollision LinearMath)
+target_include_directories(ThreeppGP PUBLIC "include" "models" "src")
 
 add_subdirectory(tests)
