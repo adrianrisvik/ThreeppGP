@@ -57,23 +57,7 @@ target_include_directories(imgui_lib PUBLIC
 
 target_link_libraries(imgui_lib PUBLIC glfw)
 
-add_executable(ThreeppGP 
-        main.cpp
-        
-        # Headers
-        include/MC.hpp
-        include/MCKeyController.hpp
-        include/PowerUp.hpp
-        include/PowerUpManager.hpp
-        include/SpeedBoost.hpp
-        include/OilSpill.hpp
-        include/CameraController.hpp
-        include/ImguiContext.hpp
-        include/SceneManager.hpp
-        include/UI.hpp
-        include/VehicleLoader.hpp  # Add this
-        
-        # Source files
+add_library(threeppgp_lib STATIC
         src/PowerUpManager.cpp
         src/SpeedBoost.cpp
         src/OilSpill.cpp
@@ -82,7 +66,14 @@ add_executable(ThreeppGP
         src/UI.cpp
         src/VehicleLoader.cpp
         src/Physics.cpp
-        include/Physics.hpp  # Add this
+)
+target_link_libraries(threeppgp_lib PUBLIC threepp::threepp assimp::assimp imgui_lib)
+target_include_directories(threeppgp_lib PUBLIC "include" "models" "src")
+
+
+add_executable(ThreeppGP 
+        main.cpp
+
 )
 
 # ============ PRECOMPILED HEADERS - ADD THIS! ============
@@ -98,15 +89,10 @@ target_precompile_headers(ThreeppGP PRIVATE
         <vector>
         <string>
         <iostream>
-
 )
 # =========================================================
-target_link_libraries(ThreeppGP PUBLIC threepp::threepp)
-target_link_libraries(ThreeppGP PUBLIC assimp::assimp)
-target_link_libraries(ThreeppGP PUBLIC imgui_lib)
+target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
+target_include_directories(ThreeppGP PUBLIC "include" "models" "src")
 
-target_include_directories(ThreeppGP PUBLIC "include")
-target_include_directories(ThreeppGP PUBLIC "models")
-target_include_directories(ThreeppGP PUBLIC "src")
 
 add_subdirectory(tests)
