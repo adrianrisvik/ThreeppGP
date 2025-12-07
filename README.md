@@ -81,12 +81,15 @@ Decoupled from physics and rendering
 
 📂 Code Layout
 src/
-├── main.cpp            # Game loop
-├── MC.hpp / MC.cpp     # Motorcycle logic
-├── Physics.hpp / cpp   # Bullet physics integration
-├── VehicleLoader.cpp   # Loads bike model
-├── SceneManager.cpp    # Scene setup
-├── UI.cpp              # ImGui interface
+├── main.cpp                   # Entry point and game loop
+├── MC.hpp                     # Motorcycle class: position, rotation, speed, lean logic
+├── MCKeyController.hpp        # Handles keyboard input for motorcycle
+├── CameraController.hpp / cpp # Controls camera following the bike
+├── Physics.hpp / cpp          # Bullet physics integration (gravity, collisions)
+├── VehicleLoader.hpp / cpp    # Loads motorcycle model and applies materials
+├── SceneManager.hpp / cpp     # Sets up lights, grid, and track model
+├── PowerUpManager.hpp / cpp   # Handles oil spills and speed boosts
+├── UI.hpp / UI.cpp            # ImGui interface for sliders and buttons
 
 
 ⚙️ Build Instructions
@@ -108,6 +111,19 @@ UI lets you tweak physics in real-time
 
 🚀 Future Improvements
 
-Use Bullet’s Raycast Vehicle for realistic suspension, currently not the best physics implementation. 
+Use Bullet’s Raycast Vehicle for better physics, currently not the best physics implementation. 
 Make the motorcycle align with the slope when going up/downhill
 Add sound/more visual effetcs
+
+
+🧠AI-Usage
+I have used AI for several aspects of my project. I have used a combination of ChatGPT, Copilot and CLions built-in AI assistant
+AI have been used for these things
+- Mathematical equations to correctly apply physics, rotations, etc
+- Troubleshooting, when certain lines of code gave errors i would ask AI for assistance
+- AI generated most of the ImgUI implementation, where i manually adjusted numbers and certain words
+- I asked AI for how to implement Bullet physics (it was hard to find information manually online)
+- I used CLion's built in AI for overall improvements and simplification of code
+- AI has been used a decent amount when troubleshooting, with certain errors
+  - Example: Process finished with exit code -1073741819 (0xC0000005) was an error i got several times. 
+- 
