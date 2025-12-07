@@ -181,3 +181,13 @@ void Physics::setFriction(float f) {
 void Physics::setDamping(float linear, float angular) {
     mcRigidBody_->setDamping(linear, angular);
 }
+
+void Physics::resetRigidBodyPosition(const MC& mc) {
+    btTransform resetTransform;
+    resetTransform.setIdentity();
+    resetTransform.setOrigin(btVector3(mc.getPosition().x, mc.getPosition().y, mc.getPosition().z));
+    mcRigidBody_->setWorldTransform(resetTransform);
+    mcRigidBody_->getMotionState()->setWorldTransform(resetTransform);
+    mcRigidBody_->setLinearVelocity(btVector3(0, 0, 0)); // Stop movement
+    mcRigidBody_->setAngularVelocity(btVector3(0, 0, 0)); // Stop rotation
+}

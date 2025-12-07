@@ -51,7 +51,7 @@ void GameUI::render(MC& mc, Physics& physics) {
     ImGui::SliderFloat("Friction", &friction, 0.0f, 2.0f);
     ImGui::SliderFloat("Linear Damping", &dampingLinear, 0.0f, 1.0f);
     ImGui::SliderFloat("Angular Damping", &dampingAngular, 0.0f, 1.0f);
-    ImGui::SliderInt("Substeps", &substeps, 1, 60);
+    ImGui::SliderInt("Substeps", &substeps, 1, 1000);
 
     if (ImGui::Button("Reset Physics")) {
         gravity = 1000.0f;
@@ -61,7 +61,11 @@ void GameUI::render(MC& mc, Physics& physics) {
         dampingAngular = 0.0f;
         substeps = 30;
     }
-
+    ImGui::SameLine();
+    if (ImGui::Button("Reset Position")) {
+        mc.setPosition({-836, 1, -170}); // Original spawn point
+        physics.resetRigidBodyPosition(mc); // Sync Bullet body
+    }
     // Apply changes dynamically
     physics.setGravity(gravity);
     physics.setMass(mc, mass);

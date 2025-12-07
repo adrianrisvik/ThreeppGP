@@ -22,6 +22,7 @@ public:
     void setFriction(float f);
     void setDamping(float linear, float angular);
     void setSubsteps(int steps);
+    void resetRigidBodyPosition(const MC& mc);
 
 private:
     btRigidBody* createStaticCollisionShapeFromObj(const std::string& path);
