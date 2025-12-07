@@ -32,10 +32,19 @@ FetchContent_Declare(
         GIT_TAG v3.11.0
 )
 
+FetchContent_Declare(
+        bullet
+        GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
+        GIT_TAG master
+)
+FetchContent_MakeAvailable(bullet)
+
+
 FetchContent_MakeAvailable(threepp)
 FetchContent_MakeAvailable(assimp)
 FetchContent_MakeAvailable(imgui)
 FetchContent_MakeAvailable(catch2)
+FetchContent_MakeAvailable(bullet)
 
 # Create ImGui library
 add_library(imgui_lib
@@ -89,11 +98,6 @@ target_precompile_headers(ThreeppGP PRIVATE
         <iostream>
 )
 # =========================================================
-
-find_package(threepp CONFIG REQUIRED)
-find_package(assimp CONFIG REQUIRED)
-find_package(Bullet CONFIG REQUIRED)
-find_package(imgui CONFIG REQUIRED)
 
 target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
 target_link_libraries(ThreeppGP PRIVATE BulletDynamics BulletCollision LinearMath)
