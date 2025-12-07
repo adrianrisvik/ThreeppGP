@@ -9,7 +9,7 @@
 
 class Physics {
 public:
-    Physics(float gravity, float groundLevel, MC& mc);
+    Physics(float gravity, MC& mc);
     ~Physics();
 
     void update(MC& mc, float dt);
@@ -22,7 +22,7 @@ private:
     btRigidBody* createStaticCollisionShapeFromObj(const std::string& path);
 
     float gravity_;
-    float groundLevel_;
+    //float groundLevel_;
     threepp::Vector3 velocity_;
 
     btBroadphaseInterface* broadphase_;
