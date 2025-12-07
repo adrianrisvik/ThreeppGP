@@ -91,13 +91,14 @@ src/
 ├── PowerUpManager.hpp / cpp   # Handles oil spills and speed boosts
 ├── UI.hpp / UI.cpp            # ImGui interface for sliders and buttons
 
+I have also used Catch2 for testing basic functions like the MC and PowerUps
 
 ⚙️ Build Instructions
 This project uses CMake and vcpkg for dependencies.
 1. Clone vcpkg
-   git clone https://github.com/microsoft/vcpkg.gitcd vcpkg./bootstrap-vcpkg.sh   # or bootstrap-vcpkg.bat on WindowsVis flere linjer
+   git clone https://github.com/microsoft/vcpkg.gitcd vcpkg./bootstrap-vcpkg.sh
 2. Install dependencies
-   ./vcpkg install threepp assimp bullet3 imguiVis flere linjer
+   ./vcpkg install threepp assimp bullet3 imgui
 3. Build the project
    cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
 

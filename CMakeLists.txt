@@ -90,8 +90,10 @@ target_precompile_headers(ThreeppGP PRIVATE
 )
 # =========================================================
 
-
+find_package(threepp CONFIG REQUIRED)
+find_package(assimp CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
+find_package(imgui CONFIG REQUIRED)
 
 target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
 target_link_libraries(ThreeppGP PRIVATE BulletDynamics BulletCollision LinearMath)
