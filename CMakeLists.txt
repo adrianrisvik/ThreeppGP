@@ -31,18 +31,13 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/catchorg/Catch2.git
         GIT_TAG v3.11.0
 )
-FetchContent_Declare(
-        bullet
-        GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
-        GIT_TAG master
-)
-FetchContent_MakeAvailable(bullet)
+
 FetchContent_MakeAvailable(threepp)
 FetchContent_MakeAvailable(assimp)
 FetchContent_MakeAvailable(imgui)
 FetchContent_MakeAvailable(catch2)
-FetchContent_MakeAvailable(bullet)
 
+# Create ImGui library
 add_library(imgui_lib
         ${imgui_SOURCE_DIR}/imgui.cpp
         ${imgui_SOURCE_DIR}/imgui_demo.cpp
@@ -52,10 +47,12 @@ add_library(imgui_lib
         ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
+
 target_include_directories(imgui_lib PUBLIC
         ${imgui_SOURCE_DIR}
         ${imgui_SOURCE_DIR}/backends
 )
+
 target_link_libraries(imgui_lib PUBLIC glfw)
 
 add_library(threeppgp_lib STATIC
@@ -71,18 +68,30 @@ add_library(threeppgp_lib STATIC
 target_link_libraries(threeppgp_lib PUBLIC threepp::threepp assimp::assimp imgui_lib)
 target_include_directories(threeppgp_lib PUBLIC "include" "models" "src")
 
+
 add_executable(ThreeppGP
         main.cpp
+
 )
+
+# ============ PRECOMPILED HEADERS - ADD THIS! ============
 target_precompile_headers(ThreeppGP PRIVATE
         <threepp/threepp.hpp>
         <threepp/loaders/AssimpLoader.hpp>
         <threepp/extras/imgui/ImguiContext.hpp>
+        <threepp/scenes/Scene.hpp>      # Add if using scenes
+        <threepp/lights/Light.hpp>    # Add if using lights
+        <threepp/cameras/Camera.hpp>  # Add if using cameras
+        <threepp/materials/MeshStandardMaterial.hpp>  # Add if using materials
         <memory>
         <vector>
         <string>
         <iostream>
 )
+# =========================================================
+find_package(Bullet CONFIG REQUIRED)
+
+
 target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
 target_link_libraries(ThreeppGP PRIVATE BulletDynamics BulletCollision LinearMath)
 target_include_directories(ThreeppGP PUBLIC "include" "models" "src")

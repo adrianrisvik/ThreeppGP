@@ -97,13 +97,13 @@ I have also used Catch2 for testing basic functions like the MC and PowerUps
 This project uses CMake and vcpkg for dependencies.
 1. Clone vcpkg
    git clone https://github.com/microsoft/vcpkg.gitcd vcpkg./bootstrap-vcpkg.sh
-2. Install dependencies
-   ./vcpkg install threepp assimp bullet3 imgui
-3. Build the project
-   cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
+2. Install vcpkg
+   ./vcpkg install bullet3
+3. Build/Toolchain
+   cmake -B build -S . -
+   DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
 
 ✅ How It Works
-
 Game Loop updates input, physics, and UI every frame
 Physics uses Bullet to simulate gravity and collisions
 Rendering uses threepp for visuals
@@ -111,7 +111,6 @@ UI lets you tweak physics in real-time
 
 
 🚀 Future Improvements
-
 Use Bullet’s Raycast Vehicle for better physics, currently not the best physics implementation. 
 Make the motorcycle align with the slope when going up/downhill
 Add sound/more visual effetcs
