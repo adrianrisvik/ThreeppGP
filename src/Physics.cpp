@@ -169,8 +169,7 @@ void Physics::setGravity(float g) {
 
 void Physics::setMass(MC& mc, float m) {
     btVector3 inertia(0, 0, 0);
-    mcRigidBody_->getCollisionShape()->calculateLocalInertia(m, inertia);
-    mcRigidBody_->setMassProps(m, inertia);
+    mcRigidBody_->getCollisionShape()->setMargin(0.02f);    mcRigidBody_->setMassProps(m, inertia);
     mcRigidBody_->updateInertiaTensor();
 }
 
