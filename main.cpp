@@ -84,7 +84,7 @@ if (uvAttr) {
     canvas.addKeyListener(mcKeyController);
 
     // Physics setup
-    Physics physics(-9.8f, 0.0f, mc);
+    Physics physics(9.81f, 0.0f, mc);
 
     // Power-ups
     PowerUpManager powerUpManager;

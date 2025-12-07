@@ -5,19 +5,22 @@
 #include <threepp/math/Vector3.hpp>
 #include "MC.hpp"
 #include <btBulletDynamicsCommon.h>
+#include <string>
 
 class Physics {
 public:
     Physics(float gravity, float groundLevel, MC& mc);
     ~Physics();
 
-    void update(MC& mc, float deltaTime);
+    void update(MC& mc, float dt);
     void setVelocity(const threepp::Vector3& vel);
     const threepp::Vector3& getVelocity() const;
     void resetVelocity();
     void applyAcceleration(MC& mc);
 
 private:
+    btRigidBody* createStaticCollisionShapeFromObj(const std::string& path);
+
     float gravity_;
     float groundLevel_;
     threepp::Vector3 velocity_;
