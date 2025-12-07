@@ -1,12 +1,10 @@
-//
-// Created by Lenovo on 20.11.2025.
-//
 
 #include "SceneManager.hpp"
 #include <threepp/threepp.hpp>
 #include <threepp/loaders/AssimpLoader.hpp>
 #include <iostream>
 #include <threepp/materials/MeshStandardMaterial.hpp>
+#include <threepp/objects/Mesh.hpp>
 
 using namespace threepp;
 
@@ -36,99 +34,6 @@ void SceneManager::createGrid(Scene& scene) {
     scene.add(grid);
 }
 
-// Add this improved helper function
-// void SceneManager::upgradeMaterials(threepp::Group& group) {
-//     group.traverse([](threepp::Object3D& obj) {
-//         if (auto mesh = dynamic_cast<threepp::Mesh*>(&obj)) {
-//             auto currentMat = mesh->material();
-//             if (currentMat) {
-//                 auto newMat = MeshStandardMaterial::create();
-//
-//                 // Type-safe copying
-//                 if (auto basicMat = std::dynamic_pointer_cast<MeshBasicMaterial>(currentMat)) {
-//                     newMat->color = basicMat->color;
-//                     newMat->map = basicMat->map;
-//                     newMat->roughness = 0.8f;  // Higher for less shine
-//                     newMat->metalness = 0.0f;
-//                 } else if (auto lambertMat = std::dynamic_pointer_cast<MeshLambertMaterial>(currentMat)) {
-//                     newMat->color = lambertMat->color;
-//                     newMat->map = lambertMat->map;
-//                     newMat->emissive = lambertMat->emissive;
-//                     newMat->roughness = 0.7f;
-//                     newMat->metalness = 0.0f;  // Non-metallic
-//                 } else if (auto phongMat = std::dynamic_pointer_cast<MeshPhongMaterial>(currentMat)) {
-//                     newMat->color = phongMat->color;
-//                     newMat->map = phongMat->map;
-//                     newMat->emissive = phongMat->emissive;
-//                     newMat->roughness = 0.8f - (phongMat->shininess / 256.0f);  // Adjusted for less shine
-//                     newMat->metalness = 0.0f;
-//                 } else {
-//                     // Fallback: Neutral defaults with texture check
-//                     newMat->color.setRGB(0.5f, 0.5f, 0.5f);
-//                     newMat->roughness = 0.8f;
-//                     newMat->metalness = 0.0f;
-//                 }
-//
-//                 // Anti-white safeguard
-//                 if (newMat->color.equals(Color(1,1,1)) && !newMat->map) {
-//                     newMat->color.setRGB(0.8f, 0.8f, 0.8f);
-//                 }
-//
-//                 // Log for debugging textures
-//                 std::cout << "Material upgraded - Color: " << newMat->color.r << ", " << newMat->color.g << ", " << newMat->color.b
-//                           << " | Texture: " << (newMat->map ? "Loaded" : "Missing") << std::endl;
-//
-//                 // Enable shadows
-//                 //newMat->receiveShadow = true;
-//                 //newMat->castShadow = true;
-//
-//                 mesh->setMaterial(newMat);
-//             }
-//         }
-//     });
-// }
-
-// void SceneManager::upgradeMaterials(threepp::Group& group) {
-//     group.traverse([](threepp::Object3D& obj) {
-//         auto mesh = dynamic_cast<threepp::Mesh*>(&obj);
-//         if (!mesh) return;
-//
-//         auto currentMat = mesh->material();
-//         if (!currentMat) return;
-//
-//         auto newMat = MeshStandardMaterial::create();
-//
-//         // Copy diffuse (map_Kd)
-//         if (auto phongMat = std::dynamic_pointer_cast<MeshPhongMaterial>(currentMat)) {
-//             newMat->color = phongMat->color;
-//             if (phongMat->map) newMat->map = phongMat->map; // diffuse
-//             if (phongMat->normalMap) newMat->normalMap = phongMat->normalMap;
-//             if (phongMat->specularMap) newMat->metalnessMap = phongMat->specularMap;
-//             newMat->emissive = phongMat->emissive; // ambient/emissive
-//         } else if (auto lambertMat = std::dynamic_pointer_cast<MeshLambertMaterial>(currentMat)) {
-//             newMat->color = lambertMat->color;
-//             if (lambertMat->map) newMat->map = lambertMat->map;
-//             newMat->emissive = lambertMat->emissive;
-//         } else if (auto basicMat = std::dynamic_pointer_cast<MeshBasicMaterial>(currentMat)) {
-//             newMat->color = basicMat->color;
-//             if (basicMat->map) newMat->map = basicMat->map;
-//         }
-//
-//         // Set PBR defaults
-//         newMat->roughness = 0.8f;
-//         newMat->metalness = 0.0f;
-//
-//         mesh->setMaterial(newMat);
-//
-//         // Debug log
-//         std::cout << "[INFO] Mesh: " << mesh->name
-//                   << " | Diffuse: " << (newMat->map ? "Loaded" : "Missing")
-//                   << " | Normal: " << (newMat->normalMap ? "Loaded" : "Missing")
-//                   << std::endl;
-//     });
-// }
-
-
 bool SceneManager::loadSceneModel(const std::string& filePath) {
     threepp::AssimpLoader loader;
     auto loaded = loader.load(filePath);
@@ -136,18 +41,31 @@ bool SceneManager::loadSceneModel(const std::string& filePath) {
         std::cerr << "Failed to load scene model: " << filePath << std::endl;
         return false;
     }
-   // upgradeMaterials(*loaded);
-
-
 
     // Basic normalization: ensure model is visible and above ground
     loaded->position.y = 0.0f;
-    // Conservative scale for large assets; users can adjust later
     if (loaded->scale.x == 10 && loaded->scale.y == 10 && loaded->scale.z == 10) {
         loaded->scale.set(0.01f, 0.01f, 0.01f);
     }
 
     loadedModel_ = loaded;
+
+    // Capture the first mesh immediately (safe and simple)
+
+    firstMesh_ = nullptr;
+    loadedModel_->traverse([&](threepp::Object3D& obj) {
+        if (!firstMesh_) {
+            if (auto mesh = dynamic_cast<threepp::Mesh*>(&obj)) {
+                // We can't create a new shared_ptr from obj, but we can store a raw pointer temporarily
+                // Instead, store the mesh name and search later OR just keep a raw pointer for short-term use
+                // For simplicity, store a raw pointer and wrap it in a non-owning shared_ptr
+                firstMesh_ = std::shared_ptr<threepp::Mesh>(mesh, [](threepp::Mesh*) {
+                    // Do nothing: non-owning deleter
+                });
+            }
+        }
+    });
+
     return true;
 }
 
@@ -155,4 +73,8 @@ void SceneManager::addLoadedToScene(Scene& scene) {
     if (loadedModel_) {
         scene.add(*loadedModel_);
     }
+}
+
+std::shared_ptr<threepp::Mesh> SceneManager::getLoadedMesh() const {
+    return firstMesh_;
 }

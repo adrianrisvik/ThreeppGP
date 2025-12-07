@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <threepp/threepp.hpp>
 #include "threepp/extras/imgui/ImguiContext.hpp"
@@ -17,24 +18,51 @@ int main() {
     Canvas canvas("ThreeppGP");
     GLRenderer renderer(canvas.size());
     Scene scene;
-    
+
     // Scene setup
     SceneManager sceneManager;
     sceneManager.setupScene(scene);
     sceneManager.loadSceneModel("models/ArgentinaTrack/source/PistaArgentina2.obj");
+
+
+    auto mesh = sceneManager.getLoadedMesh();
+    if (!mesh) {
+        std::cerr << "[ERROR] No mesh found in loaded model!" << std::endl;
+        return -1;
+    }
+
+    auto geometry = mesh->geometry();
+
+    auto positionAttr = geometry->getAttribute("position");
+    auto normalAttr   = geometry->getAttribute("normal");
+    auto uvAttr       = geometry->getAttribute("uv");
+
+
+    std::cout << "[INFO] Geometry details:" << std::endl;
+
+if (positionAttr) {
+    std::cout << " - Position count: " << positionAttr->count() << std::endl;
+}
+if (normalAttr) {
+    std::cout << " - Normal count: " << normalAttr->count() << std::endl;
+}
+if (uvAttr) {
+    std::cout << " - UV count: " << uvAttr->count() << std::endl;
+}
+
     sceneManager.addLoadedToScene(scene);
-    
+
     // Camera setup
     PerspectiveCamera camera(75, canvas.aspect(), 0.1, 2000);
     camera.position.set(0, 2, -5);
     CameraController cameraController(camera, 8.0f, 3.0f);
-    
+
     canvas.onWindowResize([&](WindowSize size) {
         camera.aspect = size.aspect();
         camera.updateProjectionMatrix();
         renderer.setSize(size);
     });
-    
+
     // Vehicle setup
     VehicleLoader vehicleLoader;
     if (!vehicleLoader.loadVehicle("models/Ducati/1388 Motorcycle.obj")) {
@@ -42,28 +70,23 @@ int main() {
     }
     vehicleLoader.addToScene(scene);
 
-    // MC (physics) setup and start pos
+    // MC setup
     MC mc(Vector3(-836, 1, -170));
-
-    // MC Start rot, physics and visuals
-    threepp::Vector3 startRotation{0, threepp::math::PI / 4, 0};
-    mc.setRotation(startRotation);
-
-    const float baseMaxSpeed = 100.0f;
-    mc.setMaxSpeed(baseMaxSpeed);
+    mc.setRotation({0, threepp::math::PI / 4, 0});
+    mc.setMaxSpeed(100.0f);
     mc.setAcceleration(15.0f);
     mc.setBraking(30.0f);
     mc.setFriction(1.5f);
     mc.setTurn(2.5f);
+    mc.enablePhysics(true); // Enable Bullet physics mode
 
     MCKeyController mcKeyController(mc);
     canvas.addKeyListener(mcKeyController);
 
-    //Physics
-    Physics physics(-9.8f, 0.0f);
+    // Physics setup
+    Physics physics(-9.8f, 0.0f, mc);
 
-
-    // Power-ups setup and spawn locations
+    // Power-ups
     PowerUpManager powerUpManager;
     powerUpManager.addSpeedBoost(Vector3(-1023, 0, -223));
     powerUpManager.addSpeedBoost(Vector3(-1040, 0, 76));
@@ -79,7 +102,7 @@ int main() {
     powerUpManager.addToScene(scene);
 
     // UI setup
-    GameUI gameUI("Ducati", baseMaxSpeed);
+    GameUI gameUI("Ducati", mc.getMaxSpeed());
     ImguiFunctionalContext ui(canvas, [&] {
         gameUI.render(mc);
     });
@@ -89,25 +112,28 @@ int main() {
     canvas.animate([&] {
         const float dt = clock.getDelta();
 
+        // Update input and game logic
         mcKeyController.update(dt);
         powerUpManager.update(mc, dt);
         powerUpManager.animate(dt);
-        
-        // Don't pass any initial rotation - MC already has it stored
-        vehicleLoader.updateTransform(mc, Vector3(0, 0, 0));  // Changed to zeros
-        
+
+        // Apply Bullet physics movement based on MC speed
+        physics.applyAcceleration(mc);
+        physics.update(mc, dt);
+
+        // Update visuals
+        vehicleLoader.updateTransform(mc, Vector3(0, 0, 0));
         cameraController.update(mc);
         renderer.render(scene, camera);
-
         ui.render();
 
+        // Debug position every second
         static int frameCount = 0;
         if (++frameCount % 60 == 0) {
             auto pos = mc.getPosition();
             std::cout << "MC Position: (" << pos.x << ", " << pos.y << ", " << pos.z << ")" << std::endl;
         }
-        float deltaTime = 0.016f; // or calculate dynamically
-        physics.update(mc, deltaTime);
     });
+
     return 0;
 }

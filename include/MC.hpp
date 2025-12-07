@@ -1,6 +1,3 @@
-//
-// Created by Lenovo on 11.11.2025.
-//
 
 #ifndef THREEPPGP_MC_HPP
 #define THREEPPGP_MC_HPP
@@ -11,21 +8,17 @@
 class MC {
 public:
     explicit MC(const threepp::Vector3 InitialPos = {}, const threepp::Vector3 InitialRot = {})
-    : position_(InitialPos), rotation_(InitialRot) {
-    }
+        : position_(InitialPos), rotation_(InitialRot) {}
 
+    // Movement controls
     void accelerateForward(float dt) {
         currentSpeed_ += acceleration_ * dt;
-        if (currentSpeed_ > maxSpeed_) {
-            currentSpeed_ = maxSpeed_;
-        }
+        if (currentSpeed_ > maxSpeed_) currentSpeed_ = maxSpeed_;
     }
 
     void accelerateBackward(float dt) {
         currentSpeed_ -= acceleration_ * dt;
-        if (currentSpeed_ < -maxSpeed_ * 0.5f) {  // Reverse is typically slower
-            currentSpeed_ = -maxSpeed_ * 0.5f;
-        }
+        if (currentSpeed_ < -maxSpeed_ * 0.5f) currentSpeed_ = -maxSpeed_ * 0.5f;
     }
 
     void applyBraking(float dt) {
@@ -39,7 +32,6 @@ public:
     }
 
     void applyFriction(float dt) {
-        // Natural deceleration when no input
         if (currentSpeed_ > 0) {
             currentSpeed_ -= friction_ * dt;
             if (currentSpeed_ < 0) currentSpeed_ = 0;
@@ -50,16 +42,15 @@ public:
     }
 
     void updateMovement(float dt) {
-        // Move based on current speed
+        if (usePhysics_) return; // Bullet handles movement
         float angle = rotation_.y;
         position_.x -= std::sin(angle) * currentSpeed_ * dt;
         position_.z -= std::cos(angle) * currentSpeed_ * dt;
     }
 
     void turnLeft(float dt) {
-        // Turning is more effective at higher speeds
         float turnEffectiveness = std::abs(currentSpeed_) / maxSpeed_;
-        turnEffectiveness = std::max(0.3f, turnEffectiveness);  // Minimum turn rate
+        turnEffectiveness = std::max(0.3f, turnEffectiveness);
         rotation_.y += turn_ * turnEffectiveness * dt;
         targetLean_ = maxLeanAngle_;
     }
@@ -76,88 +67,55 @@ public:
         currentLean_ += leanDiff * leanSpeed_ * dt;
     }
 
-    threepp::Vector3 getPosition() const {
-        return position_;
-    }
+    // Position & rotation
+    threepp::Vector3 getPosition() const { return position_; }
+    void setPosition(const threepp::Vector3& p) { position_ = p; }
 
-    void setPosition(const threepp::Vector3& p) {
-        position_ = p;
-    }
+    threepp::Vector3 getRotation() const { return rotation_; }
+    void setRotation(const threepp::Vector3& r) { rotation_ = r; }
 
-    threepp::Vector3 getRotation() const {
-        return rotation_;
-    }
-
-    // Add this method
-    void setRotation(const threepp::Vector3& r) {
-        rotation_ = r;
-    }
-
-    // Rotation used for rendering only (adds a temporary visual yaw offset).
     threepp::Vector3 getVisualRotation() const {
         threepp::Vector3 r = rotation_;
         r.y += visualYawOffset_;
         return r;
     }
 
-    float getCurrentSpeed() const {
-        return currentSpeed_;
+    // Physics helpers
+    threepp::Vector3 getForwardDirection() const {
+        return {-std::sin(rotation_.y), 0, -std::cos(rotation_.y)};
     }
 
-    float getCurrentLean() const {
-        return currentLean_;
+    threepp::Vector3 getSpeedVector() const {
+        auto dir = getForwardDirection();
+        return {dir.x * currentSpeed_, dir.y * currentSpeed_, dir.z * currentSpeed_};
     }
 
-    void setMaxSpeed(float speed) {
-        maxSpeed_ = speed;
-    }
+    // Speed & lean
+    float getCurrentSpeed() const { return currentSpeed_; }
+    void setCurrentSpeed(float speed) { currentSpeed_ = speed; } // Needed for OilSpill & SpeedBoost
+    float getCurrentLean() const { return currentLean_; }
 
-    void setAcceleration(float accel) {
-        acceleration_ = accel;
-    }
+    // Config setters
+    void setMaxSpeed(float speed) { maxSpeed_ = speed; }
+    float getMaxSpeed() const { return maxSpeed_; } // Needed for UI & SpeedBoost
+    void setAcceleration(float accel) { acceleration_ = accel; }
+    void setBraking(float brake) { braking_ = brake; }
+    void setFriction(float friction) { friction_ = friction; }
+    void setTurn(float turn) { turn_ = turn; }
+    void setMaxLeanAngle(float angle) { maxLeanAngle_ = angle; }
+    void setLeanSpeed(float speed) { leanSpeed_ = speed; }
 
-    void setBraking(float brake) {
-        braking_ = brake;
-    }
+    void resetLean() { targetLean_ = 0; }
 
-    void setFriction(float friction) {
-        friction_ = friction;
-    }
-
-    void setTurn(float turn) {
-        turn_ = turn;
-    }
-
-    void setMaxLeanAngle(float angle) {
-        maxLeanAngle_ = angle;
-    }
-
-    void setLeanSpeed(float speed) {
-        leanSpeed_ = speed;
-    }
-
-    void resetLean() {
-        targetLean_ = 0;
-    }
-    float getMaxSpeed() const {
-        return maxSpeed_;
-    }
-
-    void applySpinEffect(float spinAmount) {
-        rotation_.y += spinAmount;
-    }
-
-    // Directly set current speed (useful for special effects like OilSpill)
-    void setCurrentSpeed(float speed) { currentSpeed_ = speed; }
-
-    // Getters for tuning/restoring physics parameters
-    float getFriction() const { return friction_; }
-    float getTurn() const { return turn_; }
-
-    // Visual spin overlay controls (do not affect movement direction)
+    // Visual spin overlay
+    void applySpinEffect(float spinAmount) { rotation_.y += spinAmount; }
     void addVisualYaw(float d) { visualYawOffset_ += d; }
     void setVisualYawOffset(float y) { visualYawOffset_ = y; }
     float getVisualYawOffset() const { return visualYawOffset_; }
+
+    // Physics toggle
+    void enablePhysics(bool enable) { usePhysics_ = enable; }
+    bool isPhysicsEnabled() const { return usePhysics_; }
 
 private:
     float maxSpeed_ = 10.0f;
@@ -173,8 +131,7 @@ private:
     threepp::Vector3 position_;
     threepp::Vector3 rotation_;
     float visualYawOffset_{0.0f};
+    bool usePhysics_ = false;
 };
 
-
-
-#endif //THREEPPGP_MC_HPP
+#endif // THREEPPGP_MC_HPP
