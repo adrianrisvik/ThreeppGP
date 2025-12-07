@@ -117,6 +117,11 @@ void Physics::applyAcceleration(MC& mc) {
     mcRigidBody_->setLinearVelocity(btVector3(vel.x, vel.y, vel.z));
 }
 
+static int simulationSubsteps = 30; // Global or class-level variable
+
+void Physics::setSubsteps(int steps) {
+    simulationSubsteps = steps;
+}
 void Physics::update(MC& mc, float dt) {
     dynamicsWorld_->stepSimulation(dt,300);
     btTransform trans;
@@ -154,4 +159,25 @@ void Physics::resetVelocity() {
     velocity_ = {0, 0, 0};
     mcRigidBody_->activate(true);
     mcRigidBody_->setLinearVelocity(btVector3(0, 0, 0));
+}
+
+void Physics::setGravity(float g) {
+    gravity_ = g;
+    dynamicsWorld_->setGravity(btVector3(0, -gravity_, 0));
+    mcRigidBody_->setGravity(btVector3(0, -gravity_, 0));
+}
+
+void Physics::setMass(MC& mc, float m) {
+    btVector3 inertia(0, 0, 0);
+    mcRigidBody_->getCollisionShape()->calculateLocalInertia(m, inertia);
+    mcRigidBody_->setMassProps(m, inertia);
+    mcRigidBody_->updateInertiaTensor();
+}
+
+void Physics::setFriction(float f) {
+    mcRigidBody_->setFriction(f);
+}
+
+void Physics::setDamping(float linear, float angular) {
+    mcRigidBody_->setDamping(linear, angular);
 }

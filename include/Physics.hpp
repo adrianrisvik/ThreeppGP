@@ -17,6 +17,11 @@ public:
     const threepp::Vector3& getVelocity() const;
     void resetVelocity();
     void applyAcceleration(MC& mc);
+    void setGravity(float g);
+    void setMass(MC& mc, float m);
+    void setFriction(float f);
+    void setDamping(float linear, float angular);
+    void setSubsteps(int steps);
 
 private:
     btRigidBody* createStaticCollisionShapeFromObj(const std::string& path);

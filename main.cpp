@@ -104,8 +104,10 @@ if (uvAttr) {
     // UI setup
     GameUI gameUI("Ducati", mc.getMaxSpeed());
     ImguiFunctionalContext ui(canvas, [&] {
-        gameUI.render(mc);
-    });
+
+        gameUI.render(mc, physics); // Pass physics to UI
+        });
+
 
     // Game loop
     Clock clock;
