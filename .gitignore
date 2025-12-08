@@ -17,3 +17,7 @@ CMakeFiles/
 Thumbs.db
 /vcpkg/
 /build/
+models/
+*.obj
+*.mtl
+*.png
