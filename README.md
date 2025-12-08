@@ -60,4 +60,4 @@ AI have been used for these things
     - Example: Process finished with exit code -1073741819 (0xC0000005) was an error i got several times.
 
 
-![UML DIAGRAM](UML%20Chart.png)
+![UML DIAGRAM](UML%20Diagram.png)
