@@ -58,4 +58,6 @@ AI have been used for these things
 - I used CLion's built in AI for overall improvements and simplification of code
 - AI has been used a decent amount when troubleshooting, with certain errors
     - Example: Process finished with exit code -1073741819 (0xC0000005) was an error i got several times.
-- 
+
+
+![UML DIAGRAM](UML%20Chart.png)
