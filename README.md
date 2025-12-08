@@ -1,6 +1,6 @@
-🏍️ ThreeppGP
+ThreeppGP
 
-📖 Overview
+Overview
 
 This is a simple motorcycle racing game inspired by MotoGP, built in C++ using:
 
@@ -10,7 +10,7 @@ ImGui for UI controls
 
 The track is based on the MotoGP Argentina circuit, so it feels like a real race track (at least visually 😉).
 
-🎮 Controls
+Controls
 
 W / A / S / D → Move the bike
 SPACE → Active braking
@@ -18,7 +18,7 @@ UI Buttons → Reset position/Physics
 UI Sliders → Adjust gravity, friction, and other physics settings in real-time
 
 
-✨ Features
+Features
 
 Dynamic Motorcycle Movement
 
@@ -38,10 +38,7 @@ Sliders for gravity, damping, and more
 Button for resetting position
 
 
-🛠️ How It’s Built
-The project tries to follow Separation of Concerns (SoC) and high cohesion (as much as possible for a first project):
-
-✅ Class Structure
+Class Structure
 
 
 MC (Motorcycle)
@@ -82,7 +79,7 @@ ImGui sliders and buttons for runtime tuning
 Decoupled from physics and rendering
 
 
-📂 Code Layout
+Code Layout
 
 src/
 ├── main.cpp                   # Entry point and game loop
@@ -105,33 +102,25 @@ src/
 
 I have also used Catch2 for testing basic functions like the MC and PowerUps
 
-⚙️ Build Instructions
+Build Instructions
 
 This project uses CMake and vcpkg for dependencies.
 1. Clone vcpkg
    git clone https://github.com/microsoft/vcpkg.gitcd vcpkg./bootstrap-vcpkg.sh
 2. Install vcpkg
    ./vcpkg install bullet3
-3. Build/Toolchain
-   cmake -B build -S . -
-   DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
-
-✅ How It Works
-
-Game Loop updates input, physics, and UI every frame
-Physics uses Bullet to simulate gravity and collisions
-Rendering uses threepp for visuals
-UI lets you tweak physics in real-time
+3. Change working directory
+   Run Debug -> Edit Config -> Working Directory -> copy paste this - $PROJECT_DIR$
 
 
-🚀 Future Improvements
+Future Improvements
 
 Use Bullet’s Raycast Vehicle for better physics, currently not the best physics implementation.
 Make the motorcycle align with the slope when going up/downhill
 Add sound/more visual effetcs
 
 
-🧠AI-Usage
+AI-Usage
 
 I have used AI for several aspects of my project. I have used a combination of ChatGPT, Copilot and CLions built-in AI assistant
 AI have been used for these things
