@@ -1,7 +1,7 @@
 //
-// Created by Lenovo on 16.11.2025.
 //
-
+// Created by Lenovo on 06.12.2025.
+//
 #include "CameraController.hpp"
 #include <cmath>
 

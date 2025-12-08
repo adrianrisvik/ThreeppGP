@@ -1,3 +1,7 @@
+//
+// Created by Lenovo on 06.12.2025.
+//
+
 #include "../include/VehicleLoader.hpp"
 #include "../include/MC.hpp"
 #include <iostream>
@@ -5,9 +9,7 @@
 #include <threepp/loaders/AssimpLoader.hpp>
 #include <threepp/threepp.hpp>
 
-
 using namespace threepp;
-
 VehicleLoader::VehicleLoader() = default;
 
 void VehicleLoader::upgradeMaterials(threepp::Group& group) {
@@ -16,26 +18,17 @@ void VehicleLoader::upgradeMaterials(threepp::Group& group) {
 
         if (auto mesh = dynamic_cast<threepp::Mesh*>(&obj)) {
 
-            // If the mesh has NO material, skip it
+            // Skip if mesh doesn't have material
             auto mat = mesh->material();
             if (!mat) return;
 
-            // --- FIX #2: Convert to MeshStandardMaterial if needed ---
-            // (This preserves textures AND enables PBR params)
             if (!dynamic_cast<MeshStandardMaterial*>(mat.get())) {
                 auto standardMat = threepp::MeshStandardMaterial::create();
 
-                // Copy texture if there is one
-                //standardMat->map = mat->map;
-
-                // Copy base color
-                //standardMat->color = mat->color;
 
                 mesh->setMaterial(standardMat);
                 mat = standardMat;
             }
-
-            // Now safe to edit material:
             auto* sm = dynamic_cast<MeshStandardMaterial*>(mat.get());
             sm->roughness = 0.8f;
             sm->metalness = 0.0f;

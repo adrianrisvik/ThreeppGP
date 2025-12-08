@@ -1,4 +1,6 @@
-
+//
+// Created by Lenovo on 06.12.2025.
+//
 #include "SceneManager.hpp"
 #include <threepp/threepp.hpp>
 #include <threepp/loaders/AssimpLoader.hpp>

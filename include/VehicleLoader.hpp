@@ -8,15 +8,12 @@
 #include <memory>
 #include <string>
 
-// Forward declarations
 namespace threepp {
     class Group;
     class Scene;
     class Vector3;
 }
-
 class MC;
-
 class VehicleLoader {
 public:
     VehicleLoader();

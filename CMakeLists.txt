@@ -32,10 +32,19 @@ FetchContent_Declare(
         GIT_TAG v3.11.0
 )
 
+FetchContent_Declare(
+        bullet
+        GIT_REPOSITORY https://github.com/bulletphysics/bullet3.git
+        GIT_TAG master
+)
+FetchContent_MakeAvailable(bullet)
+
+
 FetchContent_MakeAvailable(threepp)
 FetchContent_MakeAvailable(assimp)
 FetchContent_MakeAvailable(imgui)
 FetchContent_MakeAvailable(catch2)
+FetchContent_MakeAvailable(bullet)
 
 # Create ImGui library
 add_library(imgui_lib
@@ -65,8 +74,20 @@ add_library(threeppgp_lib STATIC
         src/VehicleLoader.cpp
         src/Physics.cpp
 )
-target_link_libraries(threeppgp_lib PUBLIC threepp::threepp assimp::assimp imgui_lib)
-target_include_directories(threeppgp_lib PUBLIC "include" "models" "src")
+target_link_libraries(threeppgp_lib PUBLIC
+        threepp::threepp
+        assimp::assimp
+        imgui_lib
+        BulletDynamics
+        BulletCollision
+        LinearMath
+)
+target_include_directories(threeppgp_lib PUBLIC
+        "include"
+        "models"
+        "src"
+        ${bullet_SOURCE_DIR}/src
+)
 
 
 add_executable(ThreeppGP
@@ -74,23 +95,19 @@ add_executable(ThreeppGP
 
 )
 
-# ============ PRECOMPILED HEADERS - ADD THIS! ============
 target_precompile_headers(ThreeppGP PRIVATE
         <threepp/threepp.hpp>
         <threepp/loaders/AssimpLoader.hpp>
         <threepp/extras/imgui/ImguiContext.hpp>
-        <threepp/scenes/Scene.hpp>      # Add if using scenes
-        <threepp/lights/Light.hpp>    # Add if using lights
-        <threepp/cameras/Camera.hpp>  # Add if using cameras
-        <threepp/materials/MeshStandardMaterial.hpp>  # Add if using materials
+        <threepp/scenes/Scene.hpp>
+        <threepp/lights/Light.hpp>
+        <threepp/cameras/Camera.hpp>
+        <threepp/materials/MeshStandardMaterial.hpp>
         <memory>
         <vector>
         <string>
         <iostream>
 )
-# =========================================================
-find_package(Bullet CONFIG REQUIRED)
-
 
 target_link_libraries(ThreeppGP PRIVATE threeppgp_lib)
 target_link_libraries(ThreeppGP PRIVATE BulletDynamics BulletCollision LinearMath)

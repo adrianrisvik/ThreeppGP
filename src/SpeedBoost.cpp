@@ -1,3 +1,6 @@
+//
+// Created by Lenovo on 06.12.2025.
+//
 #include "threepp/threepp.hpp"
 #include "SpeedBoost.hpp"
 #include "MC.hpp"
@@ -16,7 +19,6 @@ SpeedBoost::SpeedBoost(const threepp::Vector3& position, float radius,
 
 void SpeedBoost::applyEffect(MC& motorcycle, float dt) {
     if (!active_) {
-        // Effect is ongoing, count down (no extra visuals during boost)
         timeRemaining_ -= dt;
         if (timeRemaining_ <= 0.0f) {
             // Restore original speed
@@ -42,7 +44,6 @@ bool SpeedBoost::isEffectActive() const {
 }
 
 void SpeedBoost::createMesh() {
-    // Create a rotating ring/star shape for speed boost
     auto geometry = threepp::TorusGeometry::create(0.5f, 0.2f, 8, 16);
     auto material = threepp::MeshPhongMaterial::create();
     material->color = threepp::Color(0x800080);  // Purple

@@ -1,4 +1,6 @@
-
+//
+// Created by Lenovo on 06.12.2025.
+//
 #include "../include/UI.hpp"
 #include "MC.hpp"
 #include "Physics.hpp"
@@ -17,7 +19,7 @@ void GameUI::render(MC& mc, Physics& physics) {
     ImGui::Separator();
     ImGui::Text("Current: %s", vehicleName_.c_str());
 
-    // Speed readout and bar
+    // Speed
     const float curSpd = mc.getCurrentSpeed();
     const float maxSpd = mc.getMaxSpeed();
     ImGui::Text("Speed: %.2f / %.2f", curSpd, maxSpd);
@@ -35,7 +37,7 @@ void GameUI::render(MC& mc, Physics& physics) {
     ImGui::Separator();
     ImGui::TextDisabled("Controls: WASD or arrows to drive");
 
-    // ✅ Physics Controls
+    // Physics Controls
     ImGui::Separator();
     ImGui::Text("Physics Settings");
 
@@ -46,12 +48,12 @@ void GameUI::render(MC& mc, Physics& physics) {
     static float dampingAngular = 0.0f;
     static int substeps = 30; // Default substeps
 
-    ImGui::SliderFloat("Gravity", &gravity, -5000.0f, 5000.0f); // Negative allowed
+    ImGui::SliderFloat("Gravity", &gravity, -5000.0f, 500.0f); // Negative allowed
     ImGui::SliderFloat("Mass", &mass, 50.0f, 1000.0f);
     ImGui::SliderFloat("Friction", &friction, 0.0f, 2.0f);
     ImGui::SliderFloat("Linear Damping", &dampingLinear, 0.0f, 1.0f);
     ImGui::SliderFloat("Angular Damping", &dampingAngular, 0.0f, 1.0f);
-    ImGui::SliderInt("Substeps", &substeps, 1, 1000);
+    ImGui::SliderInt("Substeps", &substeps, 1, 30);
 
     if (ImGui::Button("Reset Physics")) {
         gravity = 1000.0f;
@@ -66,7 +68,6 @@ void GameUI::render(MC& mc, Physics& physics) {
         mc.setPosition({-836, 1, -170}); // Original spawn point
         physics.resetRigidBodyPosition(mc); // Sync Bullet body
     }
-    // Apply changes dynamically
     physics.setGravity(gravity);
     physics.setMass(mc, mass);
     physics.setFriction(friction);

@@ -1,4 +1,6 @@
 //
+// Created by Lenovo on 06.12.2025.
+//
 #ifndef THREEPPGP_SCENEMANAGER_HPP
 #define THREEPPGP_SCENEMANAGER_HPP
 #include <memory>

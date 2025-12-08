@@ -21,7 +21,6 @@ public:
     void setDistanceBehind(float distance);
     void setHeightAbove(float height);
 
-    // Getters
     float getDistanceBehind() const { return distanceBehind_; }
     float getHeightAbove() const { return heightAbove_; }
 
