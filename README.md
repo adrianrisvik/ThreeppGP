@@ -1,4 +1,7 @@
+Kandidat nummer: 10045
+
 ThreeppGP
+
 
 IMPORTANT!
 
@@ -110,6 +113,9 @@ Build Instructions
 1. Change working directory
    Run Debug -> Edit Config -> Working Directory -> copy paste this  `$PROJECT_DIR$`
 
+What works great
+
+I'm happy with the power ups, the visual effect of the oil spill especially, the handling and controls of the motorcycle. 
 
 Future Improvements
 
@@ -117,6 +123,8 @@ Use Bullet’s Raycast Vehicle for better physics, currently not the best physic
 Make the motorcycle align with the slope when going up/downhill
 Add sound/more visual effetcs
 The program takes a long time to load, and will be "not responding" for many seconds. I have not found a fix for this. 
+I would like to understand pointers in a better way. 
+Tried to include a pop-up logo at the beginning but was unable to do this.
 
 
 AI-Usage
