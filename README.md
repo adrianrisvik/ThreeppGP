@@ -20,8 +20,11 @@ The track is based on the MotoGP Argentina circuit
 ### Controls
 
 W / A / S / D → Move the bike
+
 SPACE → Active braking
+
 UI Buttons → Reset position/Physics
+
 UI Sliders → Adjust gravity, friction, and other physics settings in real-time
 
 
@@ -35,7 +38,7 @@ Dynamic motorcycle movement with acceleration, friction, leaning when turning. U
 
 ### What works great
 
-I'm happy with the power ups, the visual effect of the oil spill especially, the handling and controls of the motorcycle. 
+I'm happy with the power ups, the visual effect of the oil spill especially and the handling and controls of the motorcycle. 
 
 ### Future Improvements
 
