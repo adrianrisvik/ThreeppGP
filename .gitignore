@@ -7,7 +7,7 @@ _deps/
 *.so
 *.a
 *.lib
-*.o
+
 
 CMakeCache.txt
 CMakeFiles/
