@@ -12,6 +12,7 @@ class MC;
 
 class OilSpill : public PowerUp {
 public:
+    // Oil spill effects
     OilSpill(const threepp::Vector3& position, float radius = 2.0f,
              float spinForce = 6.0f, float speedReduction = 0.5f,
              float duration = 1.0f);
@@ -21,7 +22,6 @@ public:
 
 private:
     void createMesh();
-
     float spinForce_;
     float speedReduction_;
     bool hasHit_;

@@ -8,28 +8,25 @@
 #include "PowerUp.hpp"
 #include <vector>
 #include <memory>
-
 namespace threepp {
     class Scene;
+
 }
-
 class MC;
-
 class PowerUpManager {
 public:
     PowerUpManager();
 
-    // Add power-ups to the world
+    // Add power-ups
     void addSpeedBoost(const threepp::Vector3& position);
     void addOilSpill(const threepp::Vector3& position);
 
-    // Update all power-ups and check collisions
+    // Update powerups and check for collisions
     void update(MC& motorcycle, float dt);
 
-    // Add all power-up meshes to the scene
+    // Add powerup meshes to scene
     void addToScene(threepp::Scene& scene);
 
-    // Animate power-ups (rotation, bobbing, etc.)
     void animate(float time);
 
     const std::vector<std::unique_ptr<PowerUp>>& getPowerUps() const;

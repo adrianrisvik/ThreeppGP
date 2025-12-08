@@ -12,14 +12,13 @@ CameraController::CameraController(threepp::PerspectiveCamera& camera,
       distanceBehind_(distanceBehind),
       heightAbove_(heightAbove) {
 }
-
 void CameraController::update(const MC& target) {
     auto mcPos = target.getPosition();
     auto mcRot = target.getRotation();
 
     float angle = mcRot.y;
 
-    // Calculate camera position behind the vehicle
+    // Camera pos behind motorcycle
     float camX = mcPos.x + distanceBehind_ * std::sin(angle);
     float camZ = mcPos.z + distanceBehind_ * std::cos(angle);
     float camY = mcPos.y + heightAbove_;

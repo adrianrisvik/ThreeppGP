@@ -8,7 +8,6 @@
 
 #include "threepp/objects/Mesh.hpp"
 
-// Forward declarations
 namespace threepp {
     class Scene;
     class Group;
@@ -20,6 +19,7 @@ public:
     
     void setupScene(threepp::Scene& scene);
     bool loadSceneModel(const std::string& filePath);
+
     // Add the previously loaded scene/model to the given scene
     void addLoadedToScene(threepp::Scene& scene);
 
@@ -28,11 +28,9 @@ public:
     
 private:
     static void createLighting(threepp::Scene& scene);
-    //void createGround(threepp::Scene& scene);
     void createGrid(threepp::Scene& scene);
-    static void upgradeMaterials(threepp::Group& group);
-    std::shared_ptr<threepp::Group> loadedModel_{}; // stored (not auto-added) model
-    std::shared_ptr<threepp::Mesh> firstMesh_; // Store first mesh
+    std::shared_ptr<threepp::Group> loadedModel_{};
+    std::shared_ptr<threepp::Mesh> firstMesh_;
 };
 
 #endif // THREEPPGP_SCENEMANAGER_HPP

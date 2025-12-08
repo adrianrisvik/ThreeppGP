@@ -6,12 +6,10 @@
 
 #include "PowerUp.hpp"
 
-// Forward declarations instead of full include
 namespace threepp {
     class Vector3;
+    class MC;
 }
-
-class MC; // Forward declaration
 
 class SpeedBoost : public PowerUp {
 public:
@@ -23,7 +21,6 @@ public:
 
 private:
     void createMesh();
-
     float speedMultiplier_;
     float duration_;
     float timeRemaining_;

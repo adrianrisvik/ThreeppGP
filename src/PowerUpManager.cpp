@@ -31,13 +31,13 @@ void PowerUpManager::update(MC& motorcycle, float dt) {
             powerUp->applyEffect(motorcycle, dt);
         }
 
-        // Continue applying effects for duration-based power-ups
+        // Continuous effect in it's duration
         if (powerUp->isEffectActive()) {
             powerUp->applyEffect(motorcycle, dt);
         }
     }
 
-    // Remove inactive pickups (not oil spills, they stay)
+    // Remove speed boost after us, oil spill stays for multiple uses
     powerUps_.erase(
         std::remove_if(powerUps_.begin(), powerUps_.end(),
             [](const std::unique_ptr<PowerUp>& p) {

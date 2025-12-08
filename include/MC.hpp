@@ -106,10 +106,9 @@ public:
     void setTurn(float turn) { turn_ = turn; }
     void setMaxLeanAngle(float angle) { maxLeanAngle_ = angle; }
     void setLeanSpeed(float speed) { leanSpeed_ = speed; }
-
     void resetLean() { targetLean_ = 0; }
 
-    // Visual spin overlay
+    // Spin
     void applySpinEffect(float spinAmount) { rotation_.y += spinAmount; }
     void addVisualYaw(float d) { visualYawOffset_ += d; }
     void setVisualYawOffset(float y) { visualYawOffset_ = y; }
@@ -130,10 +129,9 @@ private:
     float leanSpeed_ = 3.0f;
     float currentLean_ = 0.0f;
     float targetLean_ = 0.0f;
-    threepp::Vector3 position_;
-    threepp::Vector3 rotation_;
     float visualYawOffset_{0.0f};
     bool usePhysics_ = false;
+    threepp::Vector3 position_;
+    threepp::Vector3 rotation_;
 };
-
 #endif // THREEPPGP_MC_HPP

@@ -31,24 +31,6 @@ int main() {
         return -1;
     }
 
-    auto geometry = mesh->geometry();
-
-    auto positionAttr = geometry->getAttribute("position");
-    auto normalAttr   = geometry->getAttribute("normal");
-    auto uvAttr       = geometry->getAttribute("uv");
-
-
-    std::cout << "[INFO] Geometry details:" << std::endl;
-
-if (positionAttr) {
-    std::cout << " - Position count: " << positionAttr->count() << std::endl;
-}
-if (normalAttr) {
-    std::cout << " - Normal count: " << normalAttr->count() << std::endl;
-}
-if (uvAttr) {
-    std::cout << " - UV count: " << uvAttr->count() << std::endl;
-}
 
     sceneManager.addLoadedToScene(scene);
 

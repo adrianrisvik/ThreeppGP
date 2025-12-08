@@ -14,7 +14,7 @@ public:
     std::function<void(int)> onVehicleChange;
 
     explicit MCKeyController(MC &mc) : mc(mc) {}
-
+    // WASD controls
     void onKeyPressed(threepp::KeyEvent evt)override {
         if (evt.key == threepp::Key::W) {
             isWPressed = true;
@@ -31,20 +31,9 @@ public:
         else if (evt.key == threepp::Key::SPACE) {
             isSpacePressed = true;
         }
-        else if (evt.key == threepp::Key::NUM_1) {
-            if (onVehicleChange) onVehicleChange(0);
-        }
-        else if (evt.key == threepp::Key::NUM_2) {
-            if (onVehicleChange) onVehicleChange(1);
-        }
-        else if (evt.key == threepp::Key::NUM_3) {
-            if (onVehicleChange) onVehicleChange(2);
-        }
-        else if (evt.key == threepp::Key::NUM_4) {
-            if (onVehicleChange) onVehicleChange(3);
-        }
-    }
 
+    }
+    // Key release
     void onKeyReleased(threepp::KeyEvent evt)override {
         if (evt.key == threepp::Key::W) {
             isWPressed = false;
@@ -91,10 +80,10 @@ public:
             mc.applyFriction(dt);
         }
 
-        // Update position based on current speed
+        // Update position
         mc.updateMovement(dt);
 
-        // Handle turning
+        // Turning
         if (isAPressed) {
             mc.turnLeft(dt);
             isTurning = true;
@@ -104,12 +93,12 @@ public:
             isTurning = true;
         }
 
-        // If not turning, reset lean to upright
+        // Reset lean when not turning
         if (!isTurning) {
             mc.resetLean();
         }
 
-        // Always update lean animation
+        // Update lean animation
         mc.updateLean(dt);
     }
 
@@ -121,6 +110,4 @@ private:
     bool isDPressed = false;
     bool isSpacePressed = false;
 };
-
-
 #endif //THREEPPGP_MCKEYCONTROLLER_HPP

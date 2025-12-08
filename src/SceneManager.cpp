@@ -44,7 +44,7 @@ bool SceneManager::loadSceneModel(const std::string& filePath) {
         return false;
     }
 
-    // Basic normalization: ensure model is visible and above ground
+    // Ensures model is visible and above ground. Scale is small because large model.
     loaded->position.y = 0.0f;
     if (loaded->scale.x == 10 && loaded->scale.y == 10 && loaded->scale.z == 10) {
         loaded->scale.set(0.01f, 0.01f, 0.01f);
@@ -52,17 +52,12 @@ bool SceneManager::loadSceneModel(const std::string& filePath) {
 
     loadedModel_ = loaded;
 
-    // Capture the first mesh immediately (safe and simple)
 
     firstMesh_ = nullptr;
     loadedModel_->traverse([&](threepp::Object3D& obj) {
         if (!firstMesh_) {
             if (auto mesh = dynamic_cast<threepp::Mesh*>(&obj)) {
-                // We can't create a new shared_ptr from obj, but we can store a raw pointer temporarily
-                // Instead, store the mesh name and search later OR just keep a raw pointer for short-term use
-                // For simplicity, store a raw pointer and wrap it in a non-owning shared_ptr
-                firstMesh_ = std::shared_ptr<threepp::Mesh>(mesh, [](threepp::Mesh*) {
-                    // Do nothing: non-owning deleter
+               firstMesh_ = std::shared_ptr<threepp::Mesh>(mesh, [](threepp::Mesh*) {
                 });
             }
         }

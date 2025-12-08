@@ -7,6 +7,7 @@
 #include <threepp/extras/imgui/ImguiContext.hpp>
 #include <algorithm>
 
+// Implemented with help from AI
 GameUI::GameUI(const std::string& vehicleName, float baseMaxSpeed)
     : vehicleName_(vehicleName), baseMaxSpeed_(baseMaxSpeed) {}
 
@@ -35,33 +36,33 @@ void GameUI::render(MC& mc, Physics& physics) {
     }
 
     ImGui::Separator();
-    ImGui::TextDisabled("Controls: WASD or arrows to drive");
+    ImGui::TextDisabled("Controls: WASD to drive");
 
     // Physics Controls
     ImGui::Separator();
     ImGui::Text("Physics Settings");
 
-    static float gravity = 1000.0f;
+    static float gravity = 10.0f;
     static float mass = 300.0f;
     static float friction = 0.8f;
-    static float dampingLinear = 0.0f;
-    static float dampingAngular = 0.0f;
-    static int substeps = 30; // Default substeps
+    static float dampingLinear = 0.1f;
+    static float dampingAngular = 0.1f;
+    static int substeps = 5; // Default substeps
 
-    ImGui::SliderFloat("Gravity", &gravity, -5000.0f, 500.0f); // Negative allowed
-    ImGui::SliderFloat("Mass", &mass, 50.0f, 1000.0f);
+    ImGui::SliderFloat("Gravity", &gravity, -3000.0f, 500.0f); // Negative allowed
+    ImGui::SliderFloat("Mass", &mass, 50.0f, 300.0f);
     ImGui::SliderFloat("Friction", &friction, 0.0f, 2.0f);
     ImGui::SliderFloat("Linear Damping", &dampingLinear, 0.0f, 1.0f);
     ImGui::SliderFloat("Angular Damping", &dampingAngular, 0.0f, 1.0f);
     ImGui::SliderInt("Substeps", &substeps, 1, 30);
 
     if (ImGui::Button("Reset Physics")) {
-        gravity = 1000.0f;
+        gravity = 10.0f;
         mass = 300.0f;
         friction = 0.8f;
         dampingLinear = 0.0f;
         dampingAngular = 0.0f;
-        substeps = 30;
+        substeps = 5;
     }
     ImGui::SameLine();
     if (ImGui::Button("Reset Position")) {

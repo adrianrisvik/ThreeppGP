@@ -1,5 +1,9 @@
 ThreeppGP
 
+IMPORTANT!
+
+When launching the program it will say "Not responding/Svarer ikke" for a decent while. It might take up to a minute or so but it will run eventually. Just let it run!
+
 Overview
 
 This is a simple motorcycle racing game inspired by MotoGP, built in C++ using:
@@ -8,7 +12,7 @@ Bullet Physics for realistic movement
 Assimp for loading 3D models
 ImGui for UI controls
 
-The track is based on the MotoGP Argentina circuit, so it feels like a real race track (at least visually 😉).
+The track is based on the MotoGP Argentina circuit
 
 Controls
 
@@ -103,14 +107,8 @@ src/
 I have also used Catch2 for testing basic functions like the MC and PowerUps
 
 Build Instructions
-
-This project uses CMake and vcpkg for dependencies.
-1. Clone vcpkg
-   git clone https://github.com/microsoft/vcpkg.gitcd vcpkg./bootstrap-vcpkg.sh
-2. Install vcpkg
-   ./vcpkg install bullet3
-3. Change working directory
-   Run Debug -> Edit Config -> Working Directory -> copy paste this - $PROJECT_DIR$
+1. Change working directory
+   Run Debug -> Edit Config -> Working Directory -> copy paste this  `$PROJECT_DIR$`
 
 
 Future Improvements
@@ -118,6 +116,7 @@ Future Improvements
 Use Bullet’s Raycast Vehicle for better physics, currently not the best physics implementation.
 Make the motorcycle align with the slope when going up/downhill
 Add sound/more visual effetcs
+The program takes a long time to load, and will be "not responding" for many seconds. I have not found a fix for this. 
 
 
 AI-Usage
@@ -127,7 +126,7 @@ AI have been used for these things
 - Mathematical equations to correctly apply physics, rotations, etc
 - Troubleshooting, when certain lines of code gave errors i would ask AI for assistance
 - AI generated most of the ImgUI implementation, where i manually adjusted numbers and certain words
-- I asked AI for how to implement Bullet physics (it was hard to find information manually online)
+- I asked AI for how to implement Bullet physics (it was hard to find help online)
 - I used CLion's built in AI for overall improvements and simplification of code
 - AI has been used a decent amount when troubleshooting, with certain errors
     - Example: Process finished with exit code -1073741819 (0xC0000005) was an error i got several times.

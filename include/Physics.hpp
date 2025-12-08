@@ -30,9 +30,7 @@ private:
     btRigidBody* createStaticCollisionShapeFromObj(const std::string& path);
 
     float gravity_;
-    //float groundLevel_;
     threepp::Vector3 velocity_;
-
     btBroadphaseInterface* broadphase_;
     btDefaultCollisionConfiguration* collisionConfig_;
     btCollisionDispatcher* dispatcher_;

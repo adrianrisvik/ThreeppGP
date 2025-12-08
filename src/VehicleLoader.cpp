@@ -32,7 +32,7 @@ void VehicleLoader::upgradeMaterials(threepp::Group& group) {
             auto* sm = dynamic_cast<MeshStandardMaterial*>(mat.get());
             sm->roughness = 0.8f;
             sm->metalness = 0.0f;
-
+            // For debug
             std::cout << "Vehicle material - Color: "
                       << sm->color.r << ", " << sm->color.g << ", " << sm->color.b
                       << " | Texture: " << (sm->map ? "Loaded" : "Missing")
