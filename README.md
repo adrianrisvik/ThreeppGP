@@ -1,5 +1,7 @@
 🏍️ ThreeppGP
+
 📖 Overview
+
 This is a simple motorcycle racing game inspired by MotoGP, built in C++ using:
 
 Bullet Physics for realistic movement
@@ -38,6 +40,7 @@ Button for resetting position
 
 🛠️ How It’s Built
 The project tries to follow Separation of Concerns (SoC) and high cohesion (as much as possible for a first project):
+
 ✅ Class Structure
 
 
@@ -80,20 +83,30 @@ Decoupled from physics and rendering
 
 
 📂 Code Layout
+
 src/
 ├── main.cpp                   # Entry point and game loop
+
 ├── MC.hpp                     # Motorcycle class: position, rotation, speed, lean logic
+
 ├── MCKeyController.hpp        # Handles keyboard input for motorcycle
+
 ├── CameraController.hpp / cpp # Controls camera following the bike
+
 ├── Physics.hpp / cpp          # Bullet physics integration (gravity, collisions)
+
 ├── VehicleLoader.hpp / cpp    # Loads motorcycle model and applies materials
+
 ├── SceneManager.hpp / cpp     # Sets up lights, grid, and track model
+
 ├── PowerUpManager.hpp / cpp   # Handles oil spills and speed boosts
+
 ├── UI.hpp / UI.cpp            # ImGui interface for sliders and buttons
 
 I have also used Catch2 for testing basic functions like the MC and PowerUps
 
 ⚙️ Build Instructions
+
 This project uses CMake and vcpkg for dependencies.
 1. Clone vcpkg
    git clone https://github.com/microsoft/vcpkg.gitcd vcpkg./bootstrap-vcpkg.sh
@@ -104,6 +117,7 @@ This project uses CMake and vcpkg for dependencies.
    DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
 
 ✅ How It Works
+
 Game Loop updates input, physics, and UI every frame
 Physics uses Bullet to simulate gravity and collisions
 Rendering uses threepp for visuals
@@ -111,12 +125,14 @@ UI lets you tweak physics in real-time
 
 
 🚀 Future Improvements
-Use Bullet’s Raycast Vehicle for better physics, currently not the best physics implementation. 
+
+Use Bullet’s Raycast Vehicle for better physics, currently not the best physics implementation.
 Make the motorcycle align with the slope when going up/downhill
 Add sound/more visual effetcs
 
 
 🧠AI-Usage
+
 I have used AI for several aspects of my project. I have used a combination of ChatGPT, Copilot and CLions built-in AI assistant
 AI have been used for these things
 - Mathematical equations to correctly apply physics, rotations, etc
@@ -125,5 +141,5 @@ AI have been used for these things
 - I asked AI for how to implement Bullet physics (it was hard to find information manually online)
 - I used CLion's built in AI for overall improvements and simplification of code
 - AI has been used a decent amount when troubleshooting, with certain errors
-  - Example: Process finished with exit code -1073741819 (0xC0000005) was an error i got several times. 
+    - Example: Process finished with exit code -1073741819 (0xC0000005) was an error i got several times.
 - 
